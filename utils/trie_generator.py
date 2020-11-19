@@ -29,13 +29,13 @@ class Trie:
 
         current_node.is_end_of_word = True
 
-    def does_word_exist(self, word):
+    def does_word_exist(self, word: str) -> bool:
         """This docstring is EMPTY!"""
 
         if word == "":
             return True
 
-        current_node = self.root
+        current_node: TrieNode = self.root
         for letter in word:
             if letter not in current_node.children:
                 return False
@@ -43,16 +43,16 @@ class Trie:
 
         return current_node.is_end_of_word
 
-    def build_all(self, root):
-        trie_word_list = []
+    def build_trie_word_list(self, root: TrieNode) -> list:
+        trie_words: list = []
         if root:
             if root.children:
                 for node in root.children.values():
-                    for char in self.build_all(node):
-                        trie_word_list.append(str(node.letter) + char)
+                    for char in self.build_trie_word_list(node):
+                        trie_words.append(str(node.letter) + char)
             else:
-                trie_word_list.append('')
-        return trie_word_list
+                trie_words.append('')
+        return trie_words
 
 
 new_trie = Trie()
