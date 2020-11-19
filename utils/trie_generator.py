@@ -54,6 +54,58 @@ class Trie:
                 trie_words.append('')
         return trie_words
 
+    """
+    PSEUDOCODE
+
+    accept a url string as an argument
+    create a variable to hold the current matching substring.
+    create an array of matching substrings
+
+    iterate through the url
+    for each character in the url, look for a match in the trie that we built earlier
+        if there is a match:
+            - (1) concat the character to the matching_substr variable
+            - (2) check to to see if Trie.is_end_of_word is True
+                - (a1) if it is True:
+                    - (i) append the value of the matching_substr variable to the matching_substrings array/list.
+                    - (ii) reassign matching_substr to be an empty string
+
+                - (b) check if the current node has children
+                    - (T) if yes, then we reassign the current node to be one that matches the character (and allow the iteration to continue)
+                    - (F) (else) if not, then reset the current node to be the root node
+
+                - (a2) (else) if not, then we leave the current node as is and allow the iteration to continue
+
+        else, if not (there is no match):
+            - then reset the current node to be the root
+
+
+    return the array of matching substrings (keywords)
+    """
+
+    def find_matching_substrings(self, url: str) -> list:
+        if url == "":
+            return []
+
+        current_substring = ''
+        matching_keywords = []
+        current_node: TrieNode = self.root  # root
+
+        for index, character in enumerate(url):  # p
+
+            if current_node.is_end_of_word:  # True
+                matching_keywords.append(current_substring)
+
+            if character in current_node.children:  # {}
+                current_substring = ''.join((current_substring, character))
+                current_node = current_node.children[character]
+
+            else:
+                current_substring = ''
+                current_node = self.root
+
+        return matching_keywords
+
 
 new_trie = Trie()
 keywords = ['apple', 'app', 'jello', 'gel', 'caps', 'capitols']
