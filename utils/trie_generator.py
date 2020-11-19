@@ -115,6 +115,13 @@ with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
         new_trie.add_keyword(keyword.rstrip('\n'))
 
 
+keywords = ['abaka', 'abakas', 'mecoptera', 'zitterion', 'zwitterionic']
+url: str = 'https://www.abakaszwitterionic.com.hotels.andcastles.andhouseboats.andigloos.andteepees.andriversidecabins.andlakesidecabins.andpondsidecabins.andstreamadjacentcabins.andcabinsthatarentnearanybodiesofwaterwhatsoever.andlakehouses.andregularhousesandlodgesandskilodgesandallthings.ski'
+# url = 'https://www.abaka.com/something-mecoptera/superhuman-monkeys-uncle-zwitterionic?=some-key-word'
+# url = 'https://www.abakaszwitterionic.com.hotels.andcastles.andhouseboats.andigloos.andteepees.andriversidecabins.andlakesidecabins.andpondsidecabins.andstreamadjacentcabins.andcabinsthatarentnearanybodiesofwaterwhatsoever.andlakehouses.andregularhousesandlodgesandskilodgesandallthings.ski'
+print(new_trie.find_matching_substrings(url))
+
+
 runtimes = []
 
 for _ in range(100000):
