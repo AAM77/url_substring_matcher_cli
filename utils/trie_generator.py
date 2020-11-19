@@ -54,55 +54,51 @@ class Trie:
                 trie_words.append('')
         return trie_words
 
-    """
-    PSEUDOCODE
-
-    accept a url string as an argument
-    create a variable to hold the current matching substring.
-    create an array of matching substrings
-
-    iterate through the url
-    for each character in the url, look for a match in the trie that we built earlier
-        if there is a match:
-            - (1) concat the character to the matching_substr variable
-            - (2) check to to see if Trie.is_end_of_word is True
-                - (a1) if it is True:
-                    - (i) append the value of the matching_substr variable to the matching_substrings array/list.
-                    - (ii) reassign matching_substr to be an empty string
-
-                - (b) check if the current node has children
-                    - (T) if yes, then we reassign the current node to be one that matches the character (and allow the iteration to continue)
-                    - (F) (else) if not, then reset the current node to be the root node
-
-                - (a2) (else) if not, then we leave the current node as is and allow the iteration to continue
-
-        else, if not (there is no match):
-            - then reset the current node to be the root
-
-
-    return the array of matching substrings (keywords)
-    """
-
     def find_matching_substrings(self, url: str) -> list:
         if url == "":
             return []
 
         current_substring = ''
         matching_keywords = []
-        current_node: TrieNode = self.root  # root
+        current_node: TrieNode = self.root
 
-        for index, character in enumerate(url):  # p
+        """
+        PSEUDOCODE
+        Iterate over the url
+        For every character in the url:
+            if the character is in the children of the root (or current node),
+                - add the character to the substring
+                - set the current_node to be the next_node
+                - start another loop over the url that begins at the index of the next character
+                - for each character in the loop:
+                    - if the current_node is_end_of_word:
+                        - append the current_substring to the list of matching substrings
 
-            if current_node.is_end_of_word:  # True
-                matching_keywords.append(current_substring)
+                    - if the character is in the children of the current_node:
+                        - add the character to the substring
+                    
+                    else:
+                        - reset the current substring
+                        - reset the current_node to be the root node
+        """
 
-            if character in current_node.children:  # {}
-                current_substring = ''.join((current_substring, character))
-                current_node = current_node.children[character]
+        for index, outer_character in enumerate(url):
+            if outer_character in current_node.children:
+                current_substring += outer_character
+                current_node = current_node.children[outer_character]
 
-            else:
-                current_substring = ''
-                current_node = self.root
+                for inner_character in url[index+1:]:
+                    if current_node.is_end_of_word:
+                        matching_keywords.append(current_substring)
+
+                    if inner_character in current_node.children:
+                        current_substring += inner_character
+                        current_node = current_node.children[inner_character]
+
+                    else:
+                        current_substring = ''
+                        current_node = self.root
+                        break
 
         return matching_keywords
 
@@ -123,7 +119,7 @@ runtimes = []
 
 for _ in range(100000):
     start_time = datetime.datetime.now()
-    print(new_trie.does_word_exist('zwitterionic'))
+    print(new_trie.find_matching_substrings(url))
     end_time = datetime.datetime.now()
 
     runtime = (end_time - start_time).total_seconds() * 1000
