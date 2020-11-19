@@ -43,13 +43,13 @@ class Trie:
 
         return current_node.is_end_of_word
 
-    def build_trie_word_list(self, root: TrieNode) -> list:
+    def build_trie_word_list(self, node: TrieNode) -> list:
         trie_words: list = []
-        if root:
-            if root.children:
-                for node in root.children.values():
-                    for char in self.build_trie_word_list(node):
-                        trie_words.append(str(node.letter) + char)
+        if node:
+            if node.children:
+                for child_node in node.children.values():
+                    for char in self.build_trie_word_list(child_node):
+                        trie_words.append(str(child_node.letter) + char)
             else:
                 trie_words.append('')
         return trie_words
