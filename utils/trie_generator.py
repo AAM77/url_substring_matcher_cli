@@ -69,7 +69,7 @@ with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
 
 runtimes = []
 
-for i in range(100000):
+for _ in range(100000):
     start_time = datetime.datetime.now()
     print(new_trie.does_word_exist('zwitterionic'))
     end_time = datetime.datetime.now()
