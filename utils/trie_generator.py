@@ -27,3 +27,23 @@ class Trie:
             current_node = current_node.children[letter]
 
         current_node.is_end_of_word = True
+
+    def build_all(self, root):
+        trie_word_list = []
+        if root:
+            if root.children:
+                for node in root.children.values():
+                    for char in self.build_all(node):
+                        trie_word_list.append(str(node.letter) + char)
+            else:
+                trie_word_list.append('')
+        return trie_word_list
+
+
+new_trie = Trie()
+keywords = ['apple', 'app', 'jello', 'gel', 'caps', 'capitols']
+
+for keyword in keywords:
+    new_trie.add_keyword(keyword)
+
+print(new_trie.build_all(new_trie.root))
