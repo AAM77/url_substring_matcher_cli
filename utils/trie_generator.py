@@ -1,3 +1,4 @@
+import os
 import datetime
 
 
@@ -57,15 +58,20 @@ class Trie:
 new_trie = Trie()
 keywords = ['apple', 'app', 'jello', 'gel', 'caps', 'capitols']
 
-for keyword in keywords:
-    new_trie.add_keyword(keyword)
+working_directory = os.getcwd()
+keywords_file_path = working_directory + '/data/keywords.txt'
+
+with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
+    for keyword in keywords_file:
+        print(keyword.rstrip('\n'))
+        new_trie.add_keyword(keyword.rstrip('\n'))
 
 
 runtimes = []
 
 for i in range(100000):
     start_time = datetime.datetime.now()
-    print(new_trie.does_word_exist('apps'))
+    print(new_trie.does_word_exist('zwitterionic'))
     end_time = datetime.datetime.now()
 
     runtime = (end_time - start_time).total_seconds() * 1000
