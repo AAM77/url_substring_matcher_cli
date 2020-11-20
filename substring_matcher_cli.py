@@ -31,7 +31,6 @@ class SubstringMatcherCli:
         self.display_keyword_options()
         self.request_user_input()
         self.handle_response_to_keyword_options()
-        self.does_user_want_to_start_over()
 
     def reset_values(self):
         """Resets all values to their default state"""
@@ -73,7 +72,7 @@ class SubstringMatcherCli:
         print('# WELCOME TO THE SUBSTRING MATCHER! #')
         print('#                                   #')
         print('#####################################\n')
-        print('This is an application that helps you determine if a URL contains keywords you are interested in.\n')
+        print('\nThis is an application that helps you determine if a URL contains keywords you are interested in.\n')
         print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         print('!!                                                                               !!')
         print('!! ATTENTION: Please read the README.md for instructions on how to use this CLI. !!')
@@ -83,7 +82,8 @@ class SubstringMatcherCli:
 
     def request_user_input(self):
         """Requests input from the user."""
-        self.user_input = input("Please enter your choice: ")
+        print(">>> Reminder: Enter 'exit' or 'quit' to exit the program. <<<")
+        self.user_input = input("\nPlease enter your choice: ")
 
     def check_if_user_wants_to_exit(self):
         """
@@ -118,8 +118,7 @@ class SubstringMatcherCli:
         print('\nPlease choose how you want to supply the keywords:')
         print('[1] Use the default keywords.txt file.')
         print('[2] Provide a list of keywords.')
-        print('\n')
-        print("Note: Enter '1' or '2'.")
+        print("\nHint: Enter '1' or '2'.")
 
     def handle_response_to_keyword_options(self):
         """
@@ -197,8 +196,7 @@ class SubstringMatcherCli:
         print('\nPlease choose how you want to supply the URLs:')
         print('[1] Use the default urls.txt file.')
         print('[2] Provide a list of urls.')
-        print('\n')
-        print("Note: Enter '1' or '2'.")
+        print("\nHint: Enter '1' or '2'.")
 
     def handle_response_to_url_options(self):
         if self.user_input == '1':
@@ -207,6 +205,7 @@ class SubstringMatcherCli:
                 'substring_matcher/data/urls.txt')
             print("\nDONE! Here are your results:")
             self.display_url_search_results()
+            self.does_user_want_to_start_over()
 
         elif self.user_input == '2':
             self.request_urls()
@@ -256,6 +255,7 @@ class SubstringMatcherCli:
             self.search_url_list_for_matching_keywords()
             print("\nDONE! Here are your results:")
             self.display_url_search_results()
+            self.does_user_want_to_start_over()
 
         elif self.user_input.lower() in ['n', 'no']:
             self.request_urls()
