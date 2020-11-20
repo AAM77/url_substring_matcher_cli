@@ -7,6 +7,9 @@ def build_trie_from_file(file_path: str) -> Trie:
     """
     Retrieves the keywords file, iterates through the keywords,
     then removes the newline from each keyword and adds it to the Trie.
+
+    The file_path should be a path that starts at the root. For example,
+    the file_path for the keywords.txt file would be 'substring_matcher/data/keywords.txt'.
     """
 
     if not isinstance(file_path, str):
