@@ -14,6 +14,8 @@ class SubstringMatcherCli:
     def __init__(self):
         self.trie: Trie = None
         self.user_input = ""
+        self.keyword_input = ""
+        self.url_input = ""
         self.keywords = []
         self.urls = []
         self.keyword_search_results: dict = {}
@@ -22,6 +24,7 @@ class SubstringMatcherCli:
         self.welcome_user()
         user_input = input("Press the 'Enter' or 'Return' key to continue.")
         self.display_keyword_options()
+        self.request_user_input()
         self.handle_response_to_keyword_options()
 
     def welcome_user(self):
@@ -50,15 +53,17 @@ class SubstringMatcherCli:
         print('\n')
         print("Note: Enter '1' or '2'.")
 
-    def handle_response_to_keyword_options(self):
+    def request_user_input(self):
         self.user_input = input("Please enter your choice: ")
 
+    def handle_response_to_keyword_options(self):
         if self.user_input == '1':
             print('One moment while we load your keywords into the system...')
             self.trie = build_trie_from_file(
                 'substring_matcher/data/keywords.txt')
             print('You are now ready to search URLs for keywords.')
             self.display_url_options()
+            self.request_user_input()
             self.handle_response_to_url_options()
 
         elif self.user_input == '2':
@@ -72,23 +77,29 @@ class SubstringMatcherCli:
             self.handle_response_to_keyword_options()
 
     def request_keywords(self):
-        self.user_input = ''
+        self.keyword_input = ''
         self.keywords = []
 
         print("\nEnter keywords separated by a space")
-        self.user_input = input('Your keywords: ')
+        self.keyword_input = input('Your keywords: ')
+
+    def create_keyword_list(self):
+        self.keywords = self.keyword_input.lower().split(' ')
+
+    def request_keyword_confirmation(self) -> str:
+        print(f'\nAre {self.keywords} the keywords you entered? (y/n)')
+        self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_keyword_confirmation(self):
-        self.keywords = self.user_input.split(' ')
-        print(f'\nAre {self.keywords} the keywords you entered?')
-
-        self.user_input = input('Enter yes or no (y/n): ')
+        self.create_keyword_list()
+        self.request_keyword_confirmation()
 
         if self.user_input.lower() in ['y', 'yes']:
             print('\nOne moment while we load your keywords into the system...')
             self.trie = build_trie_from_list(self.keywords)
             print('You are now ready to search URLs for keywords.')
             self.display_url_options()
+            self.request_user_input()
             self.handle_response_to_url_options()
 
         elif self.user_input.lower() in ['n', 'no']:
@@ -112,8 +123,6 @@ class SubstringMatcherCli:
         print("Note: Enter '1' or '2'.")
 
     def handle_response_to_url_options(self):
-        self.user_input = input("Please enter your choice: ")
-
         if self.user_input == '1':
             print("\nOne moment while we search the URLs for keyword matches...")
             self.search_urls_file_for_matching_keywords(
@@ -132,17 +141,22 @@ class SubstringMatcherCli:
             self.handle_response_to_url_options()
 
     def request_urls(self):
-        self.user_input = ''
+        self.url_input = ''
         self.urls = []
 
         print("\nEnter URLs separated by a space")
-        self.user_input = input('Your URLs: ')
+        self.url_input = input('Your URLs: ')
+
+    def create_url_list(self):
+        self.urls = self.url_input.lower().split(' ')
+
+    def request_url_confirmation(self) -> str:
+        print(f'\nAre {self.urls} the urls you entered? (y/n)')
+        self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_url_confirmation(self):
-        self.urls = self.user_input.split(' ')
-        print(f'\nAre {self.urls} the URLs you entered?')
-
-        self.user_input = input('Enter yes or no (y/n): ')
+        self.create_url_list()
+        self.request_url_confirmation()
 
         if self.user_input.lower() in ['y', 'yes']:
             print("\nOne moment while we search the URLs for keyword matches...")
