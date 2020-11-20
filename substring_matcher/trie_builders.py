@@ -9,6 +9,9 @@ def build_trie_from_file(file_path: str) -> Trie:
     then removes the newline from each keyword and adds it to the Trie.
     """
 
+    if not isinstance(file_path, str):
+        raise TypeError
+
     trie: Trie = Trie()
     working_directory: str = os.getcwd()
     keywords_file_path: str = f"{working_directory}/{file_path}"
@@ -25,6 +28,9 @@ def build_trie_from_list(keywords: list) -> Trie:
     Iterates through the provided list of keywords
     and adds each one to the Trie.
     """
+
+    if not isinstance(keywords, list):
+        raise TypeError
 
     trie: Trie = Trie()
 
