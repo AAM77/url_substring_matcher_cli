@@ -42,10 +42,13 @@ class SubstringMatcherCli:
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n')
         print('--------------------------------------\n')
 
+    def request_user_input(self):
+        """Requests input from the user."""
+        self.user_input = input("Please enter your choice: ")
+
     def check_if_user_wants_to_exit(self):
         if self.user_input in ['exit', 'quit']:
-            print("Thank you for using the Substring Matcher!")
-            print("Goodbye!")
+            self.display_final_message()
             quit()
 
     def display_incorrect_response_alert(self):
@@ -80,11 +83,21 @@ class SubstringMatcherCli:
         else:
             self.check_if_user_wants_to_exit()
             self.display_incorrect_response_alert()
+            self.display_keyword_options()
+            self.request_user_input()
             self.handle_response_to_keyword_options()
 
-    def request_keywords(self):
+    def clear_keyword_input_and_keywords(self):
+        """Clears the following instance variables."""
         self.keyword_input = ''
         self.keywords = []
+
+    def request_keywords(self):
+        """
+        Requests a list of keywords from the user
+        through the command line.
+        """
+        self.clear_keyword_input_and_keywords()
 
         print("\nEnter keywords separated by a space")
         self.keyword_input = input('Your keywords: ')
@@ -144,11 +157,17 @@ class SubstringMatcherCli:
         else:
             self.check_if_user_wants_to_exit()
             self.display_incorrect_response_alert()
+            self.display_url_options()
+            self.request_user_input()
             self.handle_response_to_url_options()
 
-    def request_urls(self):
+    def clear_url_input_and_urls(self):
         self.url_input = ''
         self.urls = []
+
+    def request_urls(self):
+        """Requests urls from the user through the command line."""
+        self.clear_url_input_and_urls()
 
         print("\nEnter URLs separated by a space")
         self.url_input = input('Your URLs: ')
@@ -191,8 +210,7 @@ class SubstringMatcherCli:
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
             for url in urls_file:
-                self.keyword_search_results[url]: list = self.trie.find_matching_substrings(
-                    url)
+                self.add_keyword_matches_to_search_results(url)
 
     def search_url_list_for_matching_keywords(self) -> dict:
         """
@@ -203,8 +221,16 @@ class SubstringMatcherCli:
             raise TypeError
 
         for url in self.urls:
-            self.keyword_search_results[url]: list = self.trie.find_matching_substrings(
-                url)
+            self.add_keyword_matches_to_search_results(url)
+
+    def add_keyword_matches_to_search_results(self, url):
+        """
+        Adds and matching keywords in the URL to the
+        self.keyword_search_results dictionary for the
+        specified URL.
+        """
+        self.keyword_search_results[url]: list = self.trie.find_matching_substrings(
+            url)
 
     def display_url_search_results(self):
         for url, matching_keywords in self.keyword_search_results.items():
