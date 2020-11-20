@@ -48,6 +48,7 @@ class TestTrie(unittest.TestCase):
         trie = build_trie_from_list(keywords)
         mixcase_url = 'http://www.Argonauts-Management.arM/find-managers/Woman/'
         lowercase_url = 'http://www.argonauts-management.arm/find-managers/woman/'
+        url_with_keyword_at_end = 'http://www.argonauts-management.arm/find-managers/womanly'
 
         self.assertTrue(isinstance(
             trie.find_matching_substrings(mixcase_url), list))
@@ -60,6 +61,9 @@ class TestTrie(unittest.TestCase):
 
         self.assertEqual(trie.find_matching_substrings(lowercase_url), [
                          'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+
+        self.assertEqual(trie.find_matching_substrings(url_with_keyword_at_end), [
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman', 'womanly'])
 
     def test_find_matching_substrings_from_file(self):
         trie = build_trie_from_file('substring_matcher/data/test_keywords.txt')
