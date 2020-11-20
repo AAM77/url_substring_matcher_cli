@@ -1,6 +1,6 @@
 import unittest
-from trie import Trie, TrieNode
-from trie_builders import build_trie_from_file, build_trie_from_list
+from substring_matcher.trie import Trie, TrieNode
+from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
 
 
 class TestTrieNode(unittest.TestCase):
@@ -66,7 +66,7 @@ class TestTrie(unittest.TestCase):
                          'arm', 'man', 'manage', 'management', 'manager', 'woman', 'womanly'])
 
     def test_find_matching_substrings_from_file(self):
-        trie = build_trie_from_file('substring_matcher/data/test_keywords.txt')
+        trie = build_trie_from_file('test_keywords.txt')
         mixcase_url = 'http://www.Argonauts-Management.arM/find-managers/Woman/'
         lowercase_url = 'http://www.argonauts-management.arm/find-managers/woman/'
 
@@ -88,9 +88,9 @@ class TestTrieBuilders(unittest.TestCase):
     def test_build_trie_from_file(self):
         self.assertRaises(TypeError, build_trie_from_file, 2)
         self.assertRaises(FileNotFoundError, build_trie_from_file,
-                          'substring_matcher/some_file.txt')
+                          'some_file.txt')
         self.assertTrue(isinstance(build_trie_from_file(
-            'substring_matcher/data/test_keywords.txt'), Trie))
+            'test_keywords.txt'), Trie))
 
     def test_build_trie_from_list(self):
         self.assertRaises(TypeError, build_trie_from_list, 'a')
