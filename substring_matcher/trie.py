@@ -91,6 +91,9 @@ class Trie:
                         current_substring = ''
                         current_node = self.root
                         break
+                else:
+                    if current_substring and current_node.is_end_of_word:
+                        matching_keywords.append(current_substring)
 
         return sorted(list(set(matching_keywords)))
 
