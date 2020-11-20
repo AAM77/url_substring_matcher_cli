@@ -1,6 +1,6 @@
 import os
 
-from trie import Trie
+from substring_matcher.trie import Trie
 
 
 def build_trie_from_file(file_path: str) -> Trie:
