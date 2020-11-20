@@ -8,7 +8,8 @@ from substring_matcher.trie_builders import build_trie_from_file, build_trie_fro
 
 class SubstringMatcherCli:
     """
-    It's something that does something else.
+    Creates instances of a command line interface that allows users to
+    interact with the Substring Matcher based on a set of choices.
     """
 
     def __init__(self):
@@ -47,15 +48,29 @@ class SubstringMatcherCli:
         self.user_input = input("Please enter your choice: ")
 
     def check_if_user_wants_to_exit(self):
+        """
+        Checks and exits if the user has provided 'exit' or 'quit'
+        as the input through the command line.
+        """
         if self.user_input in ['exit', 'quit']:
             self.display_final_message()
             quit()
 
     def display_incorrect_response_alert(self):
-        print('Please enter a valid choice.')
-        print("Or, enter 'exit' or 'quit' to close the program.")
+        """
+        Displays a message when the user selects and
+        invalid choice.
+        """
+        print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print('!! Please enter a valid choice.                     !!')
+        print("!! Or, enter 'exit' or 'quit' to close the program. !!")
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n')
 
     def display_keyword_options(self):
+        """
+        Displays a small menu with options related to how
+        the user wants to provide the list of keywords.
+        """
         print('\nPlease choose how you want to supply the keywords:')
         print('[1] Use the keywords.txt file.')
         print('[2] Provide a list of keywords.')
@@ -66,6 +81,10 @@ class SubstringMatcherCli:
         self.user_input = input("Please enter your choice: ")
 
     def handle_response_to_keyword_options(self):
+        """
+        Handles what to do when a user provides a
+        choice for the keyword options menu.
+        """
         if self.user_input == '1':
             print('One moment while we load your keywords into the system...')
             self.trie = build_trie_from_file(
@@ -173,13 +192,22 @@ class SubstringMatcherCli:
         self.url_input = input('Your URLs: ')
 
     def create_url_list(self):
+        """Creates a list of URLs from the user's input"""
         self.urls = self.url_input.lower().split(' ')
 
     def request_url_confirmation(self) -> str:
+        """
+        Requests confirmation from the user regarding
+        the list of urls provided.
+        """
         print(f'\nAre {self.urls} the urls you entered? (y/n)')
         self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_url_confirmation(self):
+        """
+        Handles behavior pertaining to user
+        responses to the request for URL confirmation.
+        """
         self.create_url_list()
         self.request_url_confirmation()
 
@@ -199,7 +227,7 @@ class SubstringMatcherCli:
 
     def search_urls_file_for_matching_keywords(self, file_path: str) -> dict:
         """
-        Iterates through the URLs for matches.
+        Iterates through a file containing URLs to find matching keywords.
         """
 
         if not isinstance(file_path, str):
@@ -214,7 +242,7 @@ class SubstringMatcherCli:
 
     def search_url_list_for_matching_keywords(self) -> dict:
         """
-        Iterates through the URLs for matches.
+        Iterates through a list of URLs to find matching keywords.
         """
 
         if not isinstance(self.urls, list):
@@ -233,6 +261,10 @@ class SubstringMatcherCli:
             url)
 
     def display_url_search_results(self):
+        """
+        Loops over a list of URLs and displays the URL
+        along with any matching keywords, if any.
+        """
         for url, matching_keywords in self.keyword_search_results.items():
             print("\n######################################")
             print("######################################\n")
