@@ -1,6 +1,6 @@
 import unittest
 from trie import Trie, TrieNode
-from trie_builders import build_trie_from_list
+from trie_builders import build_trie_from_file, build_trie_from_list
 
 
 class TestTrieNode(unittest.TestCase):
@@ -41,11 +41,28 @@ class TestTrie(unittest.TestCase):
         self.assertFalse(trie.does_word_exist('zebra'))
         self.assertRaises(TypeError, trie.does_word_exist, 2)
 
-    def test_find_matching_substrings(self):
+    def test_find_matching_substrings_from_list(self):
         keywords = ['arm', 'army', 'man', 'manly', 'manage',
                     'manager', 'management', 'woman', 'womanly']
 
         trie = build_trie_from_list(keywords)
+        mixcase_url = 'http://www.Argonauts-Management.arM/find-managers/Woman/'
+        lowercase_url = 'http://www.argonauts-management.arm/find-managers/woman/'
+
+        self.assertTrue(isinstance(
+            trie.find_matching_substrings(mixcase_url), list))
+
+        self.assertTrue(isinstance(
+            trie.find_matching_substrings(lowercase_url), list))
+
+        self.assertEqual(trie.find_matching_substrings(mixcase_url), [
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+
+        self.assertEqual(trie.find_matching_substrings(lowercase_url), [
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+
+    def test_find_matching_substrings_from_file(self):
+        trie = build_trie_from_file('substring_matcher/data/test_keywords.txt')
         mixcase_url = 'http://www.Argonauts-Management.arM/find-managers/Woman/'
         lowercase_url = 'http://www.argonauts-management.arm/find-managers/woman/'
 
