@@ -14,19 +14,57 @@ class SubstringMatcherCli:
 
     def __init__(self):
         self.trie: Trie = None
+        self.user_input: str = ""
+        self.keyword_input: str = ""
+        self.url_input: str = ""
+        self.keywords: list[str] = []
+        self.urls: list[str] = []
+        self.keyword_search_results: dict = {}
+
+    def start_cli(self):
+        """
+        Welcomes the user and presents a menu.
+        """
+        self.display_welcome_message()
+        user_input = input("Press the 'Enter' or 'Return' key to continue.")
+
+        self.display_keyword_options()
+        self.request_user_input()
+        self.handle_response_to_keyword_options()
+        self.does_user_want_to_start_over()
+
+    def reset_values(self):
+        """Resets all values to their default state"""
         self.user_input = ""
         self.keyword_input = ""
         self.url_input = ""
         self.keywords = []
         self.urls = []
-        self.keyword_search_results: dict = {}
+        self.keyword_search_results = {}
 
-    def run_cli(self):
-        self.welcome_user()
-        user_input = input("Press the 'Enter' or 'Return' key to continue.")
-        self.display_keyword_options()
+    def does_user_want_to_start_over(self):
+        """
+        Handles what happens once the program finishes
+        running (i.e. searching URLs for matches).
+        """
+        print("Do you want to:")
+        print("[1] Start from the beginning")
+        print("[2] Provide different URLs")
         self.request_user_input()
-        self.handle_response_to_keyword_options()
+
+        if self.user_input == '1':
+            self.reset_values()
+            self.start_cli()
+
+        elif self.user_input == '2':
+            self.display_url_options()
+            self.request_user_input()
+            self.handle_response_to_url_options()
+
+        else:
+            self.check_if_user_wants_to_exit()
+            self.display_incorrect_response_alert()
+            self.does_user_want_to_start_over()
 
     def display_welcome_message(self):
         """Displays a welcome message and warning. """
@@ -56,6 +94,12 @@ class SubstringMatcherCli:
             self.display_final_message()
             quit()
 
+    def display_final_message(self):
+        print("\n**********************************************")
+        print("* Thank you for using the Substring Matcher! *")
+        print("* Goodbye!                                   *")
+        print("**********************************************\n")
+
     def display_incorrect_response_alert(self):
         """
         Displays a message when the user selects and
@@ -77,9 +121,6 @@ class SubstringMatcherCli:
         print('\n')
         print("Note: Enter '1' or '2'.")
 
-    def request_user_input(self):
-        self.user_input = input("Please enter your choice: ")
-
     def handle_response_to_keyword_options(self):
         """
         Handles what to do when a user provides a
@@ -87,8 +128,7 @@ class SubstringMatcherCli:
         """
         if self.user_input == '1':
             print('One moment while we load your keywords into the system...')
-            self.trie = build_trie_from_file(
-                'substring_matcher/data/keywords.txt')
+            self.trie = build_trie_from_file('keywords.txt')
             print('You are now ready to search URLs for keywords.')
             self.display_url_options()
             self.request_user_input()
@@ -275,11 +315,6 @@ class SubstringMatcherCli:
             print("######################################\n")
             print("\n")
 
-    def final_message(self):
-        print("Thank you for using this substring matcher.")
-        print("Please type 'exit' or 'quit' to end the program.")
-        user_input = input("> ")
-
 
 new_cli_instance = SubstringMatcherCli()
-new_cli_instance.run_cli()
+new_cli_instance.start_cli()
