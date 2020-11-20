@@ -2,6 +2,9 @@ class TrieNode:
     """Each instance represents a node for the trie"""
 
     def __init__(self, letter: str):
+        if not isinstance(letter, str):
+            raise TypeError
+
         self.letter: str = letter
         self.children: dict = {}
         self.is_end_of_word: bool = False
@@ -15,13 +18,16 @@ class Trie:
 
     def add_keyword(self, keyword: str):
         """
-        Adds the substring/keyword to the Trie by 
+        Adds the substring/keyword to the Trie by
         creating a separate node for each unique character
         """
 
+        if not isinstance(keyword, str):
+            raise TypeError
+
         current_node: TrieNode = self.root
 
-        for letter in keyword:
+        for letter in keyword.lower():
             if letter not in current_node.children:
                 current_node.children[letter]: TrieNode = TrieNode(letter)
             current_node = current_node.children[letter]
@@ -34,6 +40,9 @@ class Trie:
         This is used promarily for a list of strings, not a url.
         """
 
+        if not isinstance(word, str):
+            raise TypeError
+
         if word == "":
             return True
 
@@ -45,30 +54,19 @@ class Trie:
 
         return current_node.is_end_of_word
 
-    def build_trie_word_list(self, node: TrieNode) -> list:
-        """
-        Builds a word list from the current Trie to determine all
-        of the words that are inside it.
-        """
-
-        trie_words: list = []
-        if node:
-            if node.children:
-                for child_node in node.children.values():
-                    for char in self.build_trie_word_list(child_node):
-                        trie_words.append(str(child_node.letter) + char)
-            else:
-                trie_words.append('')
-        return trie_words
-
     def find_matching_substrings(self, url: str) -> list:
         """
         Creates a list/array to determine all of the matching substrings
         from the URL that is passed to it.
         """
+
+        if not isinstance(url, str):
+            raise TypeError
+
         if url == "":
             return []
 
+        url = url.lower()
         current_substring = ''
         matching_keywords = []
         current_node: TrieNode = self.root
@@ -94,4 +92,20 @@ class Trie:
                         current_node = self.root
                         break
 
-        return matching_keywords
+        return sorted(list(set(matching_keywords)))
+
+    def build_trie_word_list(self, node: TrieNode) -> list:
+        """
+        Builds a word list from the current Trie to determine all
+        of the words that are inside it.
+        """
+
+        trie_words: list = []
+        if node:
+            if node.children:
+                for child_node in node.children.values():
+                    for char in self.build_trie_word_list(child_node):
+                        trie_words.append(str(child_node.letter) + char)
+            else:
+                trie_words.append('')
+        return trie_words
