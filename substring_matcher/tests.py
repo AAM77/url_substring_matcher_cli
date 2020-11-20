@@ -79,5 +79,22 @@ class TestTrie(unittest.TestCase):
                          'arm', 'man', 'manage', 'management', 'manager', 'woman'])
 
 
+class TestTrieBuilders(unittest.TestCase):
+
+    def test_build_trie_from_file(self):
+        self.assertRaises(TypeError, build_trie_from_file, 2)
+        self.assertRaises(FileNotFoundError, build_trie_from_file,
+                          'substring_matcher/some_file.txt')
+        self.assertTrue(isinstance(build_trie_from_file(
+            'substring_matcher/data/test_keywords.txt'), Trie))
+
+    def test_build_trie_from_list(self):
+        self.assertRaises(TypeError, build_trie_from_list, 'a')
+        self.assertRaises(TypeError, build_trie_from_list, 2)
+        self.assertRaises(TypeError, build_trie_from_list, {})
+        self.assertTrue(isinstance(build_trie_from_list(
+            ['cat', 'hello', 'how', 'howdy', 'meow']), Trie))
+
+
 if __name__ == '__main__':
     unittest.main()
