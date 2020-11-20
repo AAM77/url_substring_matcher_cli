@@ -27,13 +27,19 @@ class SubstringMatcherCli:
         self.request_user_input()
         self.handle_response_to_keyword_options()
 
-    def welcome_user(self):
+    def display_welcome_message(self):
+        """Displays a welcome message and warning. """
         print('#####################################')
         print('#                                   #')
         print('# WELCOME TO THE SUBSTRING MATCHER! #')
         print('#                                   #')
         print('#####################################\n')
-        print('This is an application that help you determine if a URL contains keywords you are interested in.\n')
+        print('This is an application that helps you determine if a URL contains keywords you are interested in.\n')
+        print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print('!!                                                                               !!')
+        print('!! ATTENTION: Please read the README.md for instructions on how to use this CLI. !!')
+        print('!!                                                                               !!')
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n')
         print('--------------------------------------\n')
 
     def check_if_user_wants_to_exit(self):
