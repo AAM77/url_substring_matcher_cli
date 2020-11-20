@@ -116,7 +116,7 @@ class SubstringMatcherCli:
         the user wants to provide the list of keywords.
         """
         print('\nPlease choose how you want to supply the keywords:')
-        print('[1] Use the keywords.txt file.')
+        print('[1] Use the default keywords.txt file.')
         print('[2] Provide a list of keywords.')
         print('\n')
         print("Note: Enter '1' or '2'.")
@@ -195,7 +195,7 @@ class SubstringMatcherCli:
 
     def display_url_options(self):
         print('\nPlease choose how you want to supply the URLs:')
-        print('[1] Use the urls.txt file.')
+        print('[1] Use the default urls.txt file.')
         print('[2] Provide a list of urls.')
         print('\n')
         print("Note: Enter '1' or '2'.")
