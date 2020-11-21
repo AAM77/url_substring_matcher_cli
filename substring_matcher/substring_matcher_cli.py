@@ -61,13 +61,14 @@ class SubstringMatcherCli:
         Handles what happens once the program finishes
         running (i.e. searching URLs for matches).
         """
+        self.reset_values()
+
         print("Do you want to:")
         print("[1] Start from the beginning")
         print("[2] Provide different URLs")
         self.request_user_input()
 
         if self.user_input == '1':
-            self.reset_values()
             self.start_cli()
 
         elif self.user_input == '2':
@@ -140,7 +141,7 @@ class SubstringMatcherCli:
 
     def create_keyword_list(self):
         self.keywords = [keyword.strip(
-        ) for keyword in self.keyword_input.lower().split('|') if keyword != '']
+        ) for keyword in self.keyword_input.lower().split('|') if keyword.strip() != '']
 
     def request_keyword_confirmation(self) -> str:
         print(f'\nAre {self.keywords} the keywords you entered? (y/n)')
@@ -250,7 +251,7 @@ class SubstringMatcherCli:
     def create_url_list(self):
         """Creates a list of URLs from the user's input"""
         self.urls = [url.strip()
-                     for url in self.url_input.lower().split('|') if url != '']
+                     for url in self.url_input.lower().split('|') if url.strip() != '']
 
     def request_url_confirmation(self) -> str:
         """
