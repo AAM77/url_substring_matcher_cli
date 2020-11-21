@@ -11,8 +11,7 @@
 2. Place the unzipped directory in a desired location.
 
 ## Description
-The core substring matching algorithm for URLs helps users determine if a set of keywords (of their choosing) exist
-inside of a URL (or list of URLs) of their choosing. A user is able to utilize this algorithm by interacting with the Command Line Interface (CLI). This allows users to specify the keywords (i.e. substrings) and target URLs through the command line or specify them inside of files --- keywords.txt for keywords and urls.txt for URLs.
+The core algorithm for this application is the URL substring matching algorithm. It helps users determine which keywords (of a list of keywords of their choosing) exist inside of each URL of one or more URLs. A user is able to utilize this algorithm by interacting with the Command Line Interface (CLI). This allows users to specify the keywords (i.e. substrings) and target URLs through the command line or specify them inside of files --- keywords.txt for keywords and urls.txt for URLs.
 
 Once the algorithm has the keywords and URLs it needs to run, it displays each URL with a list of matching keywords in alphabetical order. Since the challenge did not provide much detail on what the output should be, I decided to output it in a manner that was more useful for humans.
 
@@ -23,13 +22,17 @@ To elaborate further, it seems that most browsers can safely handle URLs up to a
 One of the scenarios where a more optimal algorithm will become necessary is when comparing partial genetic (e.g. DNA, RNA) sequences against a much larger genetic sequence, but that is not what this challenge was about.
 ## How to use
 
+### DO THIS FIRST
 1. Before anything, you need to install Python 3.9 or higher (preferably in a virtual environment). 
 2. Use the command line (terminal on a Mac OS) to navigate to the project's directory (i.e. ROCKERBOX CHALLENGE).
-3. Once inside the directory, you have a couple of options:
+3. Use the command line to navigate to the 'substring_matcher' directory.
+4. Once inside the 'ROCKERBOX_CHALLENGE/substring_matcher' directory, you have a couple of options:
    <br>a. run tests
    <br>b. interact with the URL substring matching script using the CLI.
 
 <br>
+
+### Assuming you are inside of the 'ROCKERBOX_CHALLENGE/substring_matcher' directory:
 
 #### Running Tests:
 If you want to run tests, type `python3 tests.py` and press the 'Enter' or Return key.
@@ -39,27 +42,31 @@ If you want to run tests, type `python3 tests.py` and press the 'Enter' or Retur
 #### Running the Command Line Interface (CLI):
 If you want to interact with the CLI, there are a few things you should set up before using it.
 
-*NOTE: If you do not plan on using files for your keywords and URLs, you can skip steps (1) and (2).*
+*NOTE: If you do not plan on using files for your keywords and URLs (i.e. you want to enter the keywords and URLs via the command line), you can skip steps (1) and (2).*
 <br>
 <br>
 
 1. If you plan to use a file for your keywords, you need to add the keywords to the keywords.txt file.
-   - From the project's root directory, navigate to 'substring_matcher/data'.
+   - From the project's root directory, navigate to the 'data' directory.
    - Open the 'keywords.txt' file and add your keywords there. Each keywords should be on a new line.
    - OR, if you want to use a text file you already have:
-     1. Delete or rename the existing keywords.txt.
-     2. Convert your file to a .txt (text file).
-     3. Rename it to keywords.txt.
-     4. Move it to the 'substring_matcher/data' directory.
+     1. Delete or rename the existing 'keywords.txt' inside of the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory
+     2. Now, go to your file that contains the keywords you want to use.
+     3. Convert your file to a text file (has a .txt extension), if it is not one already.
+     4. Rename it to 'keywords.txt'.
+     5. Move it to the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory.
+     6. Make sure that all of the keywords (substrings) are on separate lines without single or double quotes around them.
    
 2. If you plan to use a file for your URLs, you need to add the URLs to the keywords.txt file.
-   - From the project's root directory, navigate to 'substring_matcher/data'.
+   - From the project's root directory, navigate to the 'data' directory.
    - Open the 'urls.txt' file and add your URLs there. Each URL should be on a new line.
    - OR, if you want to use a text file you already have:
-     1. Delete or rename the existing 'urls.txt.'
-     2. Convert your file to a .txt (text file).
-     3. Rename it to 'urls.txt.'
-     4. Move it to the 'substring_matcher/data' directory.
+     1. Delete or rename the existing 'urls.txt' inside of the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory
+     2. Now, go to your file that contains the URLs you want to use.
+     3. Convert your file to a text file (has a .txt extension), if it is not one already.
+     4. Rename it to 'urls.txt.'
+     5. Move it to the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory.
+     6. Make sure that all of the URLs are on separate lines without single or double quotes around them.
    
 3. Using the command line, make sure you are in the project's root directory.
 4. Type `python3 substring_matcher_cli.py` and press the 'Enter' or 'Return' key.
