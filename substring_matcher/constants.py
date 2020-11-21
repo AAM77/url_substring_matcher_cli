@@ -1,6 +1,9 @@
 VALID_RESPONSES_FOR_NO: list[str] = ['n', 'no']
 VALID_RESPONSES_FOR_YES: list[str] = ['y', 'yes']
 
+DEFAULT_KEYWORDS_FILE = 'keywords.txt'
+DEFAULT_URLS_FILE = 'urls.txt'
+
 NUMBER_OF_DESIRED_RUNS = 1000
 
 SHORTEST_URL = ('abakaszwitterionic.com').lower()

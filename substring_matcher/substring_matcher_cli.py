@@ -2,7 +2,12 @@
 
 import os
 
-from constants import VALID_RESPONSES_FOR_NO, VALID_RESPONSES_FOR_YES
+from constants import (
+    DEFAULT_KEYWORDS_FILE,
+    DEFAULT_URLS_FILE,
+    VALID_RESPONSES_FOR_NO,
+    VALID_RESPONSES_FOR_YES
+)
 from trie import Trie, TrieNode
 from trie_builders import build_trie_from_file, build_trie_from_list
 from utils.cli_messages import (
@@ -94,7 +99,7 @@ class SubstringMatcherCli:
         if self.user_input == '1':
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('\nOne moment while we load your keywords into the system...')
-            self.trie = build_trie_from_file('keywords.txt')
+            self.trie = build_trie_from_file(DEFAULT_KEYWORDS_FILE)
             print('You are now ready to search URLs for keywords.')
             display_menu_options_for_url_source()
             self.request_user_input()
@@ -187,7 +192,7 @@ class SubstringMatcherCli:
         if self.user_input == '1':
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print("\nOne moment while we search the URLs for keyword matches...")
-            self.search_urls_file_for_matching_keywords('urls.txt')
+            self.search_urls_file_for_matching_keywords(DEFAULT_URLS_FILE)
             print("\nDONE! Here are your results:")
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             self.display_url_search_results()
@@ -273,15 +278,17 @@ class SubstringMatcherCli:
             self.handle_url_input()
             self.handle_url_confirmation()
 
-    def search_urls_file_for_matching_keywords(self, file_name: str) -> dict:
+    def search_urls_file_for_matching_keywords(self, file_name: str = DEFAULT_URLS_FILE) -> dict:
         """
         Iterates through a file containing URLs to find matching keywords.
         """
         if not isinstance(file_name, str):
             raise TypeError
 
+        if not file_name.lower().endswith('.txt'):
+            print("Make sure you are using a text file. The extension must be .txt")
+
         working_directory: str = os.getcwd()
-        breakpoint()
         urls_file_path: str = f"{working_directory}/data/{file_name}"
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
@@ -298,7 +305,7 @@ class SubstringMatcherCli:
         for url in self.urls:
             self.add_keyword_matches_to_search_results(url)
 
-    def add_keyword_matches_to_search_results(self, url):
+    def add_keyword_matches_to_search_results(self, url: str):
         """
         Adds and matching keywords in the URL to the
         self.keyword_search_results dictionary for the
