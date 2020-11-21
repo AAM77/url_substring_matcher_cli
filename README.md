@@ -26,17 +26,39 @@ One of the scenarios where a more optimal algorithm will become necessary is whe
 1. Before anything, you need to install Python 3.9 or higher (preferably in a virtual environment). 
 2. Use the command line (terminal on a Mac OS) to navigate to the project's directory (i.e. ROCKERBOX CHALLENGE).
 3. Use the command line to navigate to the 'substring_matcher' directory.
-4. Once inside the 'ROCKERBOX_CHALLENGE/substring_matcher' directory, you have a couple of options:
-   <br>a. run tests
-   <br>b. interact with the URL substring matching script using the CLI.
+4. Once inside the 'ROCKERBOX_CHALLENGE/substring_matcher' directory, you have a few options:
+   <br>a. Run tests
+   <br>b. Get average runtimes for 100 runs of the algorithm using varying URL sizes with approximately 369,000 keywords.
+   <br>c. Interact with the URL substring matching script using the CLI.
 
 <br>
 
 ### Assuming you are inside of the 'ROCKERBOX_CHALLENGE/substring_matcher' directory:
 
 #### Running Tests:
-If you want to run tests, type `python3 tests.py` and press the 'Enter' or Return key.
+If you want to run tests, type `python3 tests.py` into the command line and press the 'Enter' or Return key.
 
+<br>
+
+#### Getting Average Runtimes:
+If you want to get the average run times in milliseconds (ms), type `python3 tests.py` into the command line and press the 'Enter' or Return key.
+
+##### This will run the algorithm 1000 times while using 369,985 keywords to match against URLs for four different lengths:
+
+1. Short URL: 22 characters long.
+2. Medium URL: 283 characters long.
+3. Long URL: 2,511 characters long.
+4. Super Long URL: 11,778 characters long.
+
+##### My own tests on a Mid-2012 Macbook Pro with 8 GB RAM and a 2.3 Ghz i7 Quad Core processor while under heavy load revealed average runtimes in the range of the following (out of multiple sets of 1000 runs):
+
+1. Short URL: 0.045 ms - 0.052 ms
+2. Medium URL: 0.55 ms - 0.65 ms
+3. Long URL: 3.63 ms - 4.25 ms
+4. Super Long URL: 14.71 ms - 16.96 ms
+
+
+##### To change the number of times the algorithm runs, open the constants.py file inside of ROCKERBOX_CHALLENGE/substring_matcher and change the NUMBER_OF_DESIRED_RUNS value to whatever you like (e.g. 100000).
 <br>
 
 #### Running the Command Line Interface (CLI):
@@ -69,7 +91,7 @@ If you want to interact with the CLI, there are a few things you should set up b
      6. Make sure that all of the URLs are on separate lines without single or double quotes around them.
    
 3. Using the command line, make sure you are in the project's root directory.
-4. Type `python3 substring_matcher_cli.py` and press the 'Enter' or 'Return' key.
+4. Type `python3 substring_matcher_cli.py` into the command line and press the 'Enter' or 'Return' key.
 5. This will display a welcome message.
 6. Follow the instructions on the screen from here on out.
 
@@ -90,4 +112,4 @@ The Url Substring Matcher project has an AGPL-3.0 license. You may view the cont
 
 2. Optimize the code further to use even less time than it does now.
    - The search/lookup for any single known keyword is O(n), but this is not the case for a URL with an unkown amount of unknown mixed and overlapping keywords.
-   - Since the time complexity in a worst case scenario for iterating through the URL to match all possible keywords is O(m * n^2). I would like to get this down to O(m * n), if possible, or O(m * nlog(n)).
+   - Since the time complexity in a worst case scenario for iterating through the URL to match all possible keywords is O( n^2). I would like to get this down to O(n) or O(n * log(n)), if possible.
