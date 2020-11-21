@@ -44,7 +44,7 @@ If you want to interact with the CLI, there are a few things you should set up b
 <br>
 
 1. If you plan to use a file for your keywords, you need to add the keywords to the keywords.txt file.
-   - To do this, navigate to the 'data' directory inside the 'substring_matcher' directory of the project's root.
+   - From the project's root directory, navigate to 'substring_matcher/data'.
    - Open the 'keywords.txt' file and add your keywords there. Each keywords should be on a new line.
    - OR, if you want to use a text file you already have:
      1. Delete or rename the existing keywords.txt.
@@ -53,7 +53,7 @@ If you want to interact with the CLI, there are a few things you should set up b
      4. Move it to the 'substring_matcher/data' directory.
    
 2. If you plan to use a file for your URLs, you need to add the URLs to the keywords.txt file.
-   - To do this, navigate to the 'data' directory insude the 'substring_matcher' directory of the project's root.
+   - From the project's root directory, navigate to 'substring_matcher/data'.
    - Open the 'urls.txt' file and add your URLs there. Each URL should be on a new line.
    - OR, if you want to use a text file you already have:
      1. Delete or rename the existing 'urls.txt.'
