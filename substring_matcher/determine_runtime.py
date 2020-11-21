@@ -18,7 +18,7 @@ def determine_average_runtime_for_matching_keywords(url: str) -> int:
     """
 
     # build the trie
-    new_trie = build_trie_from_file('keywords.txt')
+    new_trie = build_trie_from_file('runtime_test_keywords.txt')
     print(new_trie.find_matching_substrings(url))
 
     # run the method a specified number of times.
