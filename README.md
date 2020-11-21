@@ -101,6 +101,7 @@ If you want to interact with the CLI, there are a few things you should set up b
 4. Type `python3 substring_matcher_cli.py` into the command line and press the 'Enter' or 'Return' key.
 5. This will display a welcome message.
 6. Follow the instructions on the screen from here on out.
+7. Once the keyword search finishes, the results will be sent as `.json` and `.txt` files to the 'results' directory inside of the 'substring_matcher' directory. Each run, will replace these files, so move them somewhere else or rename them if you want to run the algorithm more than once (you don't have to stop the CLI to move the result files).
 
 ## Contributing
 
