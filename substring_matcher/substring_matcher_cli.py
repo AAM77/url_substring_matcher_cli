@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import json
 import sys
 import os
@@ -297,7 +298,7 @@ class SubstringMatcherCli:
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
             for url in urls_file:
-                self.add_keyword_matches_to_search_results(url.strip())
+                self.add_keyword_match_data_to_search_results(url.strip())
 
     def search_url_list_for_matching_keywords(self) -> dict:
         """
@@ -307,16 +308,20 @@ class SubstringMatcherCli:
             raise TypeError
 
         for url in self.urls:
-            self.add_keyword_matches_to_search_results(url)
+            self.add_keyword_match_data_to_search_results(url)
 
-    def add_keyword_matches_to_search_results(self, url: str):
+    def add_keyword_match_data_to_search_results(self, url: str):
         """
         Adds and matching keywords in the URL to the
         self.keyword_search_results dictionary for the
         specified URL.
         """
-        self.keyword_search_results[url]: list = self.trie.find_matching_substrings(
+        self.keyword_search_results[url]: dict = {}
+        self.keyword_search_results[url]['matches']: list = self.trie.find_matching_substrings(
             url)
+
+        self.keyword_search_results[url][
+            'runtime']: str = f"{self.get_keyword_search_runtime(url)} milliseconds"
 
     def send_matching_keywords_data_to_json_file(self):
         matching_keywords_json_path = f"{self.working_directory}/results/matching_keywords.json"
@@ -339,12 +344,14 @@ class SubstringMatcherCli:
         with open(matching_keywords_text_path, 'w') as matching_keywords_file:
             sys.stdout = matching_keywords_file
 
-            for url, matching_keywords in self.keyword_search_results.items():
+            for url, data in self.keyword_search_results.items():
                 print("\n######################################")
                 print("######################################\n")
                 print(f"URL: {url}")
                 print("\nMATCHING KEYWORDS:")
-                print(matching_keywords)
+                print(data.get('matches'))
+                print(
+                    f"\nRuntime: {data.get('runtime')}")
                 print("\n######################################")
                 print("######################################\n")
                 print("\n")
@@ -368,6 +375,14 @@ class SubstringMatcherCli:
         print("## See the 'results' directory in 'substring_matcher' for result details.")
         print("######################################")
         print("######################################\n")
+
+    def get_keyword_search_runtime(self, url: str):
+        start_time = datetime.datetime.now()
+        self.trie.find_matching_substrings(url)
+        end_time = datetime.datetime.now()
+        runtime: int = (end_time - start_time).total_seconds() * 1000
+
+        return runtime
 
 
 new_cli_instance = SubstringMatcherCli()
