@@ -199,9 +199,9 @@ class SubstringMatcherCli:
             self.search_urls_file_for_matching_keywords(DEFAULT_URLS_FILE)
             print("\nDONE! Here are your results:")
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            self.send_matching_keywords_data_to_json_file()
-            self.send_matching_keywords_data_to_text_file()
-            self.display_url_search_results_summary()
+            self.send_search_results_data_to_json_file()
+            self.send_search_results_data_to_text_file()
+            self.display_search_results_summary()
             self.does_user_want_to_start_over()
 
         elif self.user_input == '2':
@@ -270,7 +270,9 @@ class SubstringMatcherCli:
             print("\nOne moment while we search the URLs for keyword matches...")
             self.search_url_list_for_matching_keywords()
             print("\nDONE! Here are your results:")
-            self.display_url_search_results()
+            self.send_search_results_data_to_json_file()
+            self.send_search_results_data_to_text_file()
+            self.display_search_results_summary()
             self.does_user_want_to_start_over()
 
         elif self.user_input.lower() in VALID_RESPONSES_FOR_NO:
@@ -321,28 +323,36 @@ class SubstringMatcherCli:
             url)
 
         self.keyword_search_results[url][
-            'runtime']: str = f"{self.get_keyword_search_runtime(url)} milliseconds"
+            'runtime']: str = f"{self.calculate_keyword_search_runtime(url)} milliseconds"
 
-    def send_matching_keywords_data_to_json_file(self):
-        matching_keywords_json_path = f"{self.working_directory}/results/matching_keywords.json"
+    def calculate_keyword_search_runtime(self, url: str):
+        start_time = datetime.datetime.now()
+        self.trie.find_matching_substrings(url)
+        end_time = datetime.datetime.now()
+        runtime: int = (end_time - start_time).total_seconds() * 1000
 
-        if os.path.exists(matching_keywords_json_path):
-            os.remove(matching_keywords_json_path)
+        return runtime
 
-        with open(matching_keywords_json_path, 'w') as json_file:
+    def send_search_results_data_to_json_file(self):
+        search_results_json_path = f"{self.working_directory}/results/keyword_search_results.json"
+
+        if os.path.exists(search_results_json_path):
+            os.remove(search_results_json_path)
+
+        with open(search_results_json_path, 'w') as json_file:
             json_data = json.dumps(self.keyword_search_results, indent=3)
             json_file.write(json_data)
 
-    def send_matching_keywords_data_to_text_file(self):
+    def send_search_results_data_to_text_file(self):
         original_stdout = sys.stdout
 
-        matching_keywords_text_path = f"{self.working_directory}/results/matching_keywords.txt"
+        search_results_text_path = f"{self.working_directory}/results/keyword_search_results.txt"
 
-        if os.path.exists(matching_keywords_text_path):
-            os.remove(matching_keywords_text_path)
+        if os.path.exists(search_results_text_path):
+            os.remove(search_results_text_path)
 
-        with open(matching_keywords_text_path, 'w') as matching_keywords_file:
-            sys.stdout = matching_keywords_file
+        with open(search_results_text_path, 'w') as search_results_file:
+            sys.stdout = search_results_file
 
             for url, data in self.keyword_search_results.items():
                 print("\n######################################")
@@ -358,13 +368,13 @@ class SubstringMatcherCli:
 
             sys.stdout = original_stdout
 
-    def display_url_search_results_summary(self):
+    def display_search_results_summary(self):
         """
         Loops over a list of URLs and displays the URL
         along with any matching keywords, if any.
         """
         urls_with_matching_keywords = [
-            url for url, matches in self.keyword_search_results.items() if matches]
+            url for url, data in self.keyword_search_results.items() if data['matches']]
         number_of_urls_with_matches = len(urls_with_matching_keywords)
 
         print("\n######################################")
@@ -375,14 +385,6 @@ class SubstringMatcherCli:
         print("## See the 'results' directory in 'substring_matcher' for result details.")
         print("######################################")
         print("######################################\n")
-
-    def get_keyword_search_runtime(self, url: str):
-        start_time = datetime.datetime.now()
-        self.trie.find_matching_substrings(url)
-        end_time = datetime.datetime.now()
-        runtime: int = (end_time - start_time).total_seconds() * 1000
-
-        return runtime
 
 
 new_cli_instance = SubstringMatcherCli()
