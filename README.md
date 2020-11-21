@@ -22,8 +22,13 @@ To elaborate further, it seems that most browsers can safely handle URLs up to a
 One of the scenarios where a more optimal algorithm will become necessary is when comparing partial genetic (e.g. DNA, RNA) sequences against a much larger genetic sequence, but that is not what this challenge was about.
 ## How to use
 
+**CAUTION**: These Instructions are for Mac OS.
+
 ### DO THIS FIRST
-1. Before anything, you need to install Python 3.9 or higher (preferably in a virtual environment). 
+1. Before anything, you need to install Python 3.9.0 or higher.
+   - Download Link for Mac OS: [Python 3.9.0 for Mac OS](https://www.python.org/downloads/)
+   - Download Link for Windows: [Python 3.9.0 for Windows](https://www.python.org/downloads/windows/)
+   - Download Link for Linux: [Python 3.9.0 for Linux/UNIX](https://www.python.org/downloads/)
 2. Use the command line (terminal on a Mac OS) to navigate to the project's directory (i.e. ROCKERBOX CHALLENGE).
 3. Use the command line to navigate to the 'substring_matcher' directory.
 4. Once inside the 'ROCKERBOX_CHALLENGE/substring_matcher' directory, you have a few options:
