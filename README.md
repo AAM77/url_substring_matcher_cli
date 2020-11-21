@@ -83,3 +83,11 @@ Everyone interacting in the Url Substring Matcher project’s codebases, issue t
 
 ## License
 The Url Substring Matcher project has an AGPL-3.0 license. You may view the contents of the license at [license](https://github.com/AAM77/rockerbox_challenge/blob/main/LICENSE.md).
+
+## Future Plans
+1. Clean the code inside of the substring_matcher_cli.py file.
+   - Since the individuals who requested this challenge did not seem to care about the CLI, I left the code that manages the CLI with some repetition.
+
+2. Optimize the code further to use even less time than it does now.
+   - The search/lookup for any single known keyword is O(n), but this is not the case for a URL with an unkown amount of unknown mixed and overlapping keywords.
+   - Since the time complexity in a worst case scenario for iterating through the URL to match all possible keywords is O(m * n^2). I would like to get this down to O(m * n), if possible, or O(m * nlog(n)).
