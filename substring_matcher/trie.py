@@ -67,8 +67,8 @@ class Trie:
             return []
 
         url = url.lower()
-        current_substring = ''
-        matching_keywords = []
+        current_substring: str = ''
+        matching_keywords: list[str] = []
         current_node: TrieNode = self.root
 
         for index, outer_character in enumerate(url):
