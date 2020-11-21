@@ -1,6 +1,7 @@
 import datetime
 
 from constants import (
+    NUMBER_OF_DESIRED_RUNS,
     SHORTEST_URL,
     THREE_HUNDRED_CHARS_URL,
     TWO_THOUSAND_CHARS_URL,
@@ -25,7 +26,7 @@ def determine_average_runtime_for_matching_keywords(url: str) -> int:
     # calculate and return the average runtime.
     runtimes = []
 
-    for _ in range(100):
+    for _ in range(NUMBER_OF_DESIRED_RUNS):
         start_time = datetime.datetime.now()
         new_trie.find_matching_substrings(url)
         end_time = datetime.datetime.now()
