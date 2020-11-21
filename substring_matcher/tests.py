@@ -1,6 +1,6 @@
 import unittest
-from substring_matcher.trie import Trie, TrieNode
-from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
+from trie import Trie, TrieNode
+from trie_builders import build_trie_from_file, build_trie_from_list
 
 
 class TestTrieNode(unittest.TestCase):

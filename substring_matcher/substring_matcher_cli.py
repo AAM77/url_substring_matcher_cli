@@ -2,8 +2,8 @@
 
 import os
 
-from substring_matcher.trie import Trie, TrieNode
-from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
+from trie import Trie, TrieNode
+from trie_builders import build_trie_from_file, build_trie_from_list
 from utils.cli_messages import (
     display_farewell_message,
     display_incorrect_response_alert,
@@ -186,8 +186,7 @@ class SubstringMatcherCli:
         if self.user_input == '1':
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print("\nOne moment while we search the URLs for keyword matches...")
-            self.search_urls_file_for_matching_keywords(
-                'substring_matcher/data/urls.txt')
+            self.search_urls_file_for_matching_keywords('urls.txt')
             print("\nDONE! Here are your results:")
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             self.display_url_search_results()
@@ -273,15 +272,16 @@ class SubstringMatcherCli:
             self.handle_url_input()
             self.handle_url_confirmation()
 
-    def search_urls_file_for_matching_keywords(self, file_path: str) -> dict:
+    def search_urls_file_for_matching_keywords(self, file_name: str) -> dict:
         """
         Iterates through a file containing URLs to find matching keywords.
         """
-        if not isinstance(file_path, str):
+        if not isinstance(file_name, str):
             raise TypeError
 
         working_directory: str = os.getcwd()
-        urls_file_path: str = f"{working_directory}/{file_path}"
+        breakpoint()
+        urls_file_path: str = f"{working_directory}/data/{file_name}"
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
             for url in urls_file:
