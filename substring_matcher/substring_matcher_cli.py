@@ -2,6 +2,7 @@
 
 import os
 
+from constants import VALID_RESPONSES_FOR_NO, VALID_RESPONSES_FOR_YES
 from trie import Trie, TrieNode
 from trie_builders import build_trie_from_file, build_trie_from_list
 from utils.cli_messages import (
@@ -158,7 +159,7 @@ class SubstringMatcherCli:
         Handles behavior pertaining to user
         responses to the request for keyword confirmation.
         """
-        if self.user_input.lower() in ['y', 'yes']:
+        if self.user_input.lower() in VALID_RESPONSES_FOR_YES:
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('\nOne moment while we load your keywords into the system...')
             self.trie = build_trie_from_list(self.keywords)
@@ -167,7 +168,7 @@ class SubstringMatcherCli:
             self.request_user_input()
             self.handle_response_to_url_options()
 
-        elif self.user_input.lower() in ['n', 'no']:
+        elif self.user_input.lower() in VALID_RESPONSES_FOR_NO:
             self.request_keywords()
             self.handle_keyword_input()
             self.handle_keyword_confirmation()
@@ -253,7 +254,7 @@ class SubstringMatcherCli:
         Handles behavior pertaining to user
         responses to the request for URL confirmation.
         """
-        if self.user_input.lower() in ['y', 'yes']:
+        if self.user_input.lower() in VALID_RESPONSES_FOR_YES:
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print("\nOne moment while we search the URLs for keyword matches...")
             self.search_url_list_for_matching_keywords()
@@ -261,7 +262,7 @@ class SubstringMatcherCli:
             self.display_url_search_results()
             self.does_user_want_to_start_over()
 
-        elif self.user_input.lower() in ['n', 'no']:
+        elif self.user_input.lower() in VALID_RESPONSES_FOR_NO:
             self.request_urls()
             self.handle_url_input()
             self.handle_url_confirmation()
