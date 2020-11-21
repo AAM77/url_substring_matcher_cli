@@ -1,3 +1,8 @@
+VALID_RESPONSES_FOR_NO: list[str] = ['n', 'no']
+VALID_RESPONSES_FOR_YES: list[str] = ['y', 'yes']
+
+NUMBER_OF_DESIRED_RUNS = 1000
+
 SHORTEST_URL = ('abakaszwitterionic.com').lower()
 
 THREE_HUNDRED_CHARS_URL = ('https://www.abakaszwitterionic.com.hotels.andcastles.andhouseboats.andigloos.andteepees.andriversidecabins.andlakesidecabins.andpondsidecabins.andstreamadjacentcabins.andcabinsthatarentnearanybodiesofwaterwhatsoever.andlakehouses.andregularhousesandlodgesandskilodgesandallthings.ski').lower()
