@@ -75,4 +75,4 @@ Bug reports and pull requests are welcome on GitHub at -URL-. This project is in
 Everyone interacting in the Url Substring Matcher project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct]().
 
 ## License
-The Url Substring Matcher project has an AGPL-3.0 license. You may view the contents of the license at [license]()
+The Url Substring Matcher project has an AGPL-3.0 license. You may view the contents of the license at [license](https://github.com/AAM77/rockerbox_challenge/blob/main/LICENSE.md).
