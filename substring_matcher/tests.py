@@ -69,6 +69,7 @@ class TestTrie(unittest.TestCase):
         trie = build_trie_from_file('test_keywords.txt')
         mixcase_url = 'http://www.Argonauts-Management.arM/find-managers/Woman/'
         lowercase_url = 'http://www.argonauts-management.arm/find-managers/woman/'
+        url_with_keyword_at_end = 'http://www.argonauts-management.arm/find-managers/womanly'
 
         self.assertTrue(isinstance(
             trie.find_matching_substrings(mixcase_url), list))
@@ -82,13 +83,20 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(trie.find_matching_substrings(lowercase_url), [
                          'arm', 'man', 'manage', 'management', 'manager', 'woman'])
 
+        self.assertEqual(trie.find_matching_substrings(url_with_keyword_at_end), [
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman', 'womanly'])
+
 
 class TestTrieBuilders(unittest.TestCase):
 
     def test_build_trie_from_file(self):
         self.assertRaises(TypeError, build_trie_from_file, 2)
+
         self.assertRaises(FileNotFoundError, build_trie_from_file,
                           'some_file.txt')
+
+        self.assertRaises(ValueError, build_trie_from_file, 'some_file')
+
         self.assertTrue(isinstance(build_trie_from_file(
             'test_keywords.txt'), Trie))
 
