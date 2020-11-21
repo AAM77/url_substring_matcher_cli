@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import json
+import pprint
+import sys
 import os
 
 from constants import (
@@ -33,6 +36,7 @@ class SubstringMatcherCli:
         self.keywords: list[str] = []
         self.urls: list[str] = []
         self.keyword_search_results: dict = {}
+        self.working_directory: str = os.getcwd()
 
     def start_cli(self):
         """Welcomes the user and presents a menu."""
@@ -195,7 +199,9 @@ class SubstringMatcherCli:
             self.search_urls_file_for_matching_keywords(DEFAULT_URLS_FILE)
             print("\nDONE! Here are your results:")
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            self.display_url_search_results()
+            self.send_matching_keywords_data_to_json_file()
+            self.send_matching_keywords_data_to_text_file()
+            self.display_url_search_results_summary()
             self.does_user_want_to_start_over()
 
         elif self.user_input == '2':
@@ -288,12 +294,11 @@ class SubstringMatcherCli:
         if not file_name.lower().endswith('.txt'):
             print("Make sure you are using a text file. The extension must be .txt")
 
-        working_directory: str = os.getcwd()
-        urls_file_path: str = f"{working_directory}/data/{file_name}"
+        urls_file_path: str = f"{self.working_directory}/data/{file_name}"
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
             for url in urls_file:
-                self.add_keyword_matches_to_search_results(url)
+                self.add_keyword_matches_to_search_results(url.strip())
 
     def search_url_list_for_matching_keywords(self) -> dict:
         """
@@ -314,20 +319,56 @@ class SubstringMatcherCli:
         self.keyword_search_results[url]: list = self.trie.find_matching_substrings(
             url)
 
-    def display_url_search_results(self):
+    def send_matching_keywords_data_to_json_file(self):
+        matching_keywords_json_path = f"{self.working_directory}/results/matching_keywords.json"
+
+        if os.path.exists(matching_keywords_json_path):
+            os.remove(matching_keywords_json_path)
+
+        with open(matching_keywords_json_path, 'w') as json_file:
+            json_data = json.dumps(self.keyword_search_results, indent=3)
+            json_file.write(json_data)
+
+    def send_matching_keywords_data_to_text_file(self):
+        original_stdout = sys.stdout
+
+        matching_keywords_text_path = f"{self.working_directory}/results/matching_keywords.txt"
+
+        if os.path.exists(matching_keywords_text_path):
+            os.remove(matching_keywords_text_path)
+
+        with open(matching_keywords_text_path, 'w') as matching_keywords_file:
+            sys.stdout = matching_keywords_file
+
+            for url, matching_keywords in self.keyword_search_results.items():
+                print("\n######################################")
+                print("######################################\n")
+                print(f"URL: {url}")
+                print("\nMATCHING KEYWORDS:")
+                print(matching_keywords)
+                print("\n######################################")
+                print("######################################\n")
+                print("\n")
+
+            sys.stdout = original_stdout
+
+    def display_url_search_results_summary(self):
         """
         Loops over a list of URLs and displays the URL
         along with any matching keywords, if any.
         """
-        for url, matching_keywords in self.keyword_search_results.items():
-            print("\n######################################")
-            print("######################################\n")
-            print(f"URL: {url}")
-            print("\nMATCHING KEYWORDS:")
-            print(matching_keywords)
-            print("\n######################################")
-            print("######################################\n")
-            print("\n")
+        urls_with_matching_keywords = [
+            url for url, matches in self.keyword_search_results.items() if matches]
+        number_of_urls_with_matches = len(urls_with_matching_keywords)
+
+        print("\n######################################")
+        print("######################################")
+        print(f"## Total number of urls: {len(self.keyword_search_results)}")
+        print(f"## URLs with Matching Keywords: {number_of_urls_with_matches}")
+        print("##")
+        print("## See the 'results' directory in 'substring_matcher' for result details.")
+        print("######################################")
+        print("######################################\n")
 
 
 new_cli_instance = SubstringMatcherCli()

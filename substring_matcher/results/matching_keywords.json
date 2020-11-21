@@ -1,0 +1,20 @@
+{
+   "http://www.this.tha/mandalorian": [
+      "man",
+      "manda",
+      "mandalorian",
+      "this"
+   ],
+   "https://why-wont-this-work.com.but-that-works/mandalorian/okay/": [
+      "-work",
+      "and",
+      "man",
+      "manda",
+      "mandalorian",
+      "okay",
+      "that",
+      "this",
+      "why-wont"
+   ],
+   "https://superduperstupendous.com": []
+}
