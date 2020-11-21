@@ -25,7 +25,7 @@ def build_trie_from_file(file_name: str) -> Trie:
 
     with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
         for keyword in keywords_file:
-            trie.add_keyword(keyword.rstrip('\n'))
+            trie.add_keyword(keyword.strip())
 
     return trie
 
