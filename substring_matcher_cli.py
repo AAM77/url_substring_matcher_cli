@@ -4,6 +4,13 @@ import os
 
 from substring_matcher.trie import Trie, TrieNode
 from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
+from utils.cli_messages import (
+    display_farewell_message,
+    display_incorrect_response_alert,
+    display_menu_options_for_keyword_source,
+    display_menu_options_for_url_source,
+    display_welcome_message
+)
 
 
 class SubstringMatcherCli:
