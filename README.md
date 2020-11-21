@@ -75,9 +75,10 @@ If you want to interact with the CLI, there are a few things you should set up b
      1. Delete or rename the existing 'keywords.txt' inside of the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory
      2. Now, go to your file that contains the keywords you want to use.
      3. Convert your file to a text file (has a .txt extension), if it is not one already.
-     4. Rename it to 'keywords.txt'.
+     4. Make sure that all of the keywords (substrings) are on separate lines without single or double quotes around them.
      5. Move it to the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory.
-     6. Make sure that all of the keywords (substrings) are on separate lines without single or double quotes around them.
+     6. Rename it to 'keywords.txt'.
+     7. ***NOTE:*** *As an alternative to steps (6), you can change the value for the DEFAULT_KEYWORDS_FILE constant in 'substring_matcher/constants.py' to be the name of your file. It must still be a text file with the .txt extension, however.*
    
 2. If you plan to use a file for your URLs, you need to add the URLs to the keywords.txt file.
    - From the project's root directory, navigate to the 'data' directory.
@@ -86,9 +87,10 @@ If you want to interact with the CLI, there are a few things you should set up b
      1. Delete or rename the existing 'urls.txt' inside of the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory
      2. Now, go to your file that contains the URLs you want to use.
      3. Convert your file to a text file (has a .txt extension), if it is not one already.
-     4. Rename it to 'urls.txt.'
+     4. Make sure that all of the URLs are on separate lines without single or double quotes around them.
      5. Move it to the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory.
-     6. Make sure that all of the URLs are on separate lines without single or double quotes around them.
+     6. Rename it to 'urls.txt.'
+     7. ***NOTE:*** *As an alternative to steps (6), you can change the value for the DEFAULT_URLS_FILE constant in 'substring_matcher/constants.py' to be the name of your file. It must still be a text file with the .txt extension, however.*
    
 3. Using the command line, make sure you are in the project's root directory.
 4. Type `python3 substring_matcher_cli.py` into the command line and press the 'Enter' or 'Return' key.
