@@ -16,6 +16,9 @@ def build_trie_from_file(file_name: str) -> Trie:
     if not isinstance(file_name, str):
         raise TypeError
 
+    if not file_name.lower().endswith('.txt'):
+        raise ValueError("File extension must be .txt")
+
     trie: Trie = Trie()
     working_directory: str = os.getcwd()
     keywords_file_path: str = f"{working_directory}/data/{file_name}"
