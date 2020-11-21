@@ -135,9 +135,8 @@ class SubstringMatcherCli:
 
         elif self.user_input == '2':
             self.request_keywords()
+            self.handle_keyword_input()
 
-            if self.user_input:
-                self.handle_keyword_confirmation()
         else:
             self.check_if_user_wants_to_exit()
             self.display_incorrect_response_alert()
@@ -167,10 +166,19 @@ class SubstringMatcherCli:
         print(f'\nAre {self.keywords} the keywords you entered? (y/n)')
         self.user_input = input('Enter yes or no (y/n): ')
 
-    def handle_keyword_confirmation(self):
-        self.create_keyword_list()
-        self.request_keyword_confirmation()
+    def handle_keyword_input(self):
+        if self.keyword_input:
+            self.create_keyword_list()
+            self.request_keyword_confirmation()
+            self.handle_keyword_confirmation()
+        else:
+            print("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("!! You must provide at least one keyword. !!")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            self.request_keywords()
+            self.handle_keyword_input()
 
+    def handle_keyword_confirmation(self):
         if self.user_input.lower() in ['y', 'yes']:
             print('\nOne moment while we load your keywords into the system...')
             self.trie = build_trie_from_list(self.keywords)
@@ -181,10 +189,7 @@ class SubstringMatcherCli:
 
         elif self.user_input.lower() in ['n', 'no']:
             self.request_keywords()
-
-            while not self.user_input:
-                self.request_keywords()
-
+            self.handle_keyword_input()
             self.handle_keyword_confirmation()
 
         else:
@@ -239,6 +244,7 @@ class SubstringMatcherCli:
         Requests confirmation from the user regarding
         the list of urls provided.
         """
+
         print(f'\nAre {self.urls} the urls you entered? (y/n)')
         self.user_input = input('Enter yes or no (y/n): ')
 
