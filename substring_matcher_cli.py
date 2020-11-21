@@ -115,6 +115,7 @@ class SubstringMatcherCli:
         Displays a small menu with options related to how
         the user wants to provide the list of keywords.
         """
+        print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('\nPlease choose how you want to supply the keywords:')
         print('[1] Use the default keywords.txt file.')
         print('[2] Provide a list of keywords.')
@@ -126,7 +127,8 @@ class SubstringMatcherCli:
         choice for the keyword options menu.
         """
         if self.user_input == '1':
-            print('One moment while we load your keywords into the system...')
+            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+            print('\nOne moment while we load your keywords into the system...')
             self.trie = build_trie_from_file('keywords.txt')
             print('You are now ready to search URLs for keywords.')
             self.display_url_options()
@@ -167,7 +169,7 @@ class SubstringMatcherCli:
         self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_keyword_input(self):
-        if self.keyword_input:
+        if self.keyword_input.strip():
             self.create_keyword_list()
             self.request_keyword_confirmation()
             self.handle_keyword_confirmation()
@@ -180,6 +182,7 @@ class SubstringMatcherCli:
 
     def handle_keyword_confirmation(self):
         if self.user_input.lower() in ['y', 'yes']:
+            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('\nOne moment while we load your keywords into the system...')
             self.trie = build_trie_from_list(self.keywords)
             print('You are now ready to search URLs for keywords.')
@@ -198,6 +201,7 @@ class SubstringMatcherCli:
             self.handle_keyword_confirmation()
 
     def display_url_options(self):
+        print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('\nPlease choose how you want to supply the URLs:')
         print('[1] Use the default urls.txt file.')
         print('[2] Provide a list of urls.')
@@ -205,18 +209,19 @@ class SubstringMatcherCli:
 
     def handle_response_to_url_options(self):
         if self.user_input == '1':
+            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print("\nOne moment while we search the URLs for keyword matches...")
             self.search_urls_file_for_matching_keywords(
                 'substring_matcher/data/urls.txt')
             print("\nDONE! Here are your results:")
+            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             self.display_url_search_results()
             self.does_user_want_to_start_over()
 
         elif self.user_input == '2':
             self.request_urls()
+            self.handle_url_input()
 
-            if self.user_input:
-                self.handle_url_confirmation()
         else:
             self.check_if_user_wants_to_exit()
             self.display_incorrect_response_alert()
@@ -234,6 +239,18 @@ class SubstringMatcherCli:
 
         print("\nEnter URLs separated by a space")
         self.url_input = input('Your URLs: ')
+
+    def handle_url_input(self):
+        if self.url_input.strip():
+            self.create_url_list()
+            self.request_url_confirmation()
+            self.handle_url_confirmation()
+        else:
+            print("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("!! You must provide at least one URL. !!")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            self.request_urls()
+            self.handle_url_input()
 
     def create_url_list(self):
         """Creates a list of URLs from the user's input"""
@@ -253,9 +270,6 @@ class SubstringMatcherCli:
         Handles behavior pertaining to user
         responses to the request for URL confirmation.
         """
-        self.create_url_list()
-        self.request_url_confirmation()
-
         if self.user_input.lower() in ['y', 'yes']:
             print("\nOne moment while we search the URLs for keyword matches...")
             self.search_url_list_for_matching_keywords()
@@ -265,6 +279,8 @@ class SubstringMatcherCli:
 
         elif self.user_input.lower() in ['n', 'no']:
             self.request_urls()
+            self.handle_url_input()
+            self.handle_url_confirmation()
 
         else:
             self.check_if_user_wants_to_exit()
