@@ -5,21 +5,22 @@ import json
 import sys
 import os
 
-from constants import (
+from substring_matcher.constants import (
     DEFAULT_KEYWORDS_FILE,
     DEFAULT_URLS_FILE,
     VALID_RESPONSES_FOR_NO,
     VALID_RESPONSES_FOR_YES
 )
-from trie import Trie, TrieNode
-from trie_builders import build_trie_from_file, build_trie_from_list
-from utils.cli_messages import (
+from substring_matcher.trie import Trie, TrieNode
+from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
+from substring_matcher.utils.cli_messages import (
     display_farewell_message,
     display_incorrect_response_alert,
     display_menu_options_for_keyword_source,
     display_menu_options_for_url_source,
     display_welcome_message
 )
+from substring_matcher.utils.file_paths import resource_path
 
 
 class SubstringMatcherCli:
@@ -297,7 +298,8 @@ class SubstringMatcherCli:
         if not file_name.lower().endswith('.txt'):
             print("Make sure you are using a text file. The extension must be .txt")
 
-        urls_file_path: str = f"{self.working_directory}/data/{file_name}"
+        urls_file_path: str = resource_path(
+            f"substring_matcher/data/{file_name}")
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
             for url in urls_file:
@@ -335,7 +337,8 @@ class SubstringMatcherCli:
         return runtime
 
     def send_search_results_data_to_json_file(self):
-        search_results_json_path = f"{self.working_directory}/results/keyword_search_results.json"
+        search_results_json_path: str = resource_path(
+            "substring_matcher/results/keyword_search_results.json")
 
         if os.path.exists(search_results_json_path):
             os.remove(search_results_json_path)
@@ -347,7 +350,8 @@ class SubstringMatcherCli:
     def send_search_results_data_to_text_file(self):
         original_stdout = sys.stdout
 
-        search_results_text_path = f"{self.working_directory}/results/keyword_search_results.txt"
+        search_results_text_path: str = resource_path(
+            "substring_matcher/results/keyword_search_results.txt")
 
         if os.path.exists(search_results_text_path):
             os.remove(search_results_text_path)
@@ -388,5 +392,6 @@ class SubstringMatcherCli:
         print("######################################\n")
 
 
-new_cli_instance = SubstringMatcherCli()
-new_cli_instance.start_cli()
+def main():
+    new_cli_instance = SubstringMatcherCli()
+    new_cli_instance.start_cli()
