@@ -95,7 +95,7 @@ class SubstringMatcherCli:
         """
         if self.user_input in ['exit', 'quit']:
             display_farewell_message()
-            quit()
+            sys.exit()
 
     def handle_response_to_keyword_options(self):
         """
