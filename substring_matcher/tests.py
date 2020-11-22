@@ -1,6 +1,8 @@
+import sys
 import unittest
-from trie import Trie, TrieNode
-from trie_builders import build_trie_from_file, build_trie_from_list
+from substring_matcher.trie import Trie, TrieNode
+from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
+from substring_matcher.substring_matcher_cli import SubstringMatcherCli
 
 
 class TestTrieNode(unittest.TestCase):
@@ -106,7 +108,3 @@ class TestTrieBuilders(unittest.TestCase):
         self.assertRaises(TypeError, build_trie_from_list, {})
         self.assertTrue(isinstance(build_trie_from_list(
             ['cat', 'hello', 'how', 'howdy', 'meow']), Trie))
-
-
-if __name__ == '__main__':
-    unittest.main()
