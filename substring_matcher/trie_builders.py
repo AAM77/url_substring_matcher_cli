@@ -1,6 +1,7 @@
 import os
 
 from substring_matcher.trie import Trie
+from substring_matcher.utils.file_paths import resource_path
 
 
 def build_trie_from_file(file_name: str) -> Trie:
@@ -21,7 +22,9 @@ def build_trie_from_file(file_name: str) -> Trie:
 
     trie: Trie = Trie()
     working_directory: str = os.getcwd()
-    keywords_file_path: str = f"{working_directory}/data/{file_name}"
+    # keywords_file_path: str = f"{working_directory}/substring_matcher/data/{file_name}"
+    keywords_file_path: str = resource_path(
+        f"substring_matcher/data/{file_name}")
 
     with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
         for keyword in keywords_file:
