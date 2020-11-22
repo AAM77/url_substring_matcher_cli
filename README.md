@@ -1,5 +1,9 @@
 # URL Substring Matcher
 
+## Author:
+### Mohammad Adeel
+#### First version released on November 22, 2020
+
 ## Installation
 
 #### Using Git:
