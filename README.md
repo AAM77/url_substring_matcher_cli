@@ -169,3 +169,5 @@ The Url Substring Matcher project has an AGPL-3.0 license. You may view the cont
 3. Provide users with the option to supply a unique file name or path for the file containing the keywords or URLs.
    
 4. Provide unique names for the result files, add timestamps, and potentially move them to another folder when the program ends.
+
+5. Validate URLs and keywords. I did not do it in this instance because the requirements did not ask for it. It's a simple addition.
