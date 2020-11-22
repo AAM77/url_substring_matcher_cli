@@ -22,7 +22,6 @@ def build_trie_from_file(file_name: str) -> Trie:
 
     trie: Trie = Trie()
     working_directory: str = os.getcwd()
-    # keywords_file_path: str = f"{working_directory}/substring_matcher/data/{file_name}"
     keywords_file_path: str = resource_path(
         f"substring_matcher/data/{file_name}")
 
