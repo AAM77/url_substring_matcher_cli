@@ -1,13 +1,13 @@
 import datetime
 
-from constants import (
+from substring_matcher.constants import (
     NUMBER_OF_DESIRED_RUNS,
     SHORTEST_URL,
     THREE_HUNDRED_CHARS_URL,
     TWO_THOUSAND_CHARS_URL,
     ELEVEN_THOUSAND_CHARS_URL
 )
-from trie_builders import build_trie_from_file
+from substring_matcher.trie_builders import build_trie_from_file
 
 
 def determine_average_runtime_for_matching_keywords(url: str) -> int:
