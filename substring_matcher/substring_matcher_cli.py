@@ -2,8 +2,9 @@
 
 import datetime
 import json
-import sys
+import re
 import os
+import sys
 
 from substring_matcher.constants import (
     DEFAULT_KEYWORDS_FILE,
@@ -117,7 +118,7 @@ class SubstringMatcherCli:
         command line.
         """
         if self.keyword_input.strip():
-            self.create_keyword_list()
+            self.create_keyword_lists_from_user_input()
             self.request_keyword_confirmation()
             self.handle_keyword_confirmation()
         else:
@@ -125,13 +126,28 @@ class SubstringMatcherCli:
             self.request_keywords()
             self.handle_keyword_input()
 
-    def create_keyword_list(self):
-        self.keywords = [keyword.strip(
-        ) for keyword in self.keyword_input.lower().split('|') if keyword.strip() != '']
+    def create_keyword_lists_from_user_input(self):
+        for keyword in self.keyword_input.lower().split('|'):
+            formatted_keyword = keyword.strip()
+
+            if formatted_keyword != '':
+                self.add_keyword_to_appropriate_list(formatted_keyword)
+
+    def add_keyword_to_appropriate_list(self, formatted_keyword):
+        if self.is_valid_keyword(formatted_keyword):
+            self.keywords.append(formatted_keyword)
+        else:
+            self.invalid_keywords.append(formatted_keyword)
+
+    @staticmethod
+    def is_valid_keyword(keyword):
+        return bool(re.match("^[A-Za-z_-]*$", keyword))
 
     def request_keyword_confirmation(self) -> str:
-        display_confirmation_message_for_keywords(self.keywords)
-        self.user_input = input('Enter yes or no (y/n): ')
+        display_confirmation_message_for_keywords(
+            self.keywords, self.invalid_keywords
+        )
+        self.user_input = input('Continue?: ')
 
     def handle_keyword_confirmation(self):
         """
