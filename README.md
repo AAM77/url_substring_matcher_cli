@@ -39,7 +39,7 @@ This requires less work to setup, but it limits what users can or cannot do. The
 
 TO USE IT:
 
-***NOTE**: *If you want to use file for the keywords (substrings) or URLs, you need to follow steps (5), (6), and (8) now-- before starting the CLI.*
+***NOTE**: *If you want to use file for the keywords (substrings) or URLs, you should to follow steps (5), (6), and (8) now-- before starting the CLI.*
 <br>
 1. Double click on the file named **cli**, located in the 'ROCKERBOX_CHALLENGE/dist/cli' directory.
 2. It will launch the terminal (the command line on Mac OS).
@@ -51,7 +51,7 @@ TO USE IT:
    - If you want to use your own file, then rename or delete the 'keywords.txt' in this directory.
    - Then convert your file to a plain text file with the .txt extension and rename it to 'keywords.txt.'
    - You still need to make sure that your keywords are all on separate lines.
-   - ***NOTE:*** *You **cannot** modify the keywords.txt file while the CLI script is waiting for you to select an option (i.e. you do need to restart the CLI).*
+   - ***NOTE:*** *You can modify the keywords.txt file while the CLI script is waiting for you to select an option (i.e. you do not need to restart the CLI).*
 7. Once you are done with that step, the CLI will ask you if you want to use a text file for your list of URLs or if you want to enter them manually.
 8. Steps (5) and (6) apply for the URLs as well, so you can follow those. Just make sure you are editing or replacing the 'urls.txt' file inside of the 'ROCKERBOX_CHALLENGE/dist/cli/substring_matcher/data' directory.
 9.  Once you complete that step, the keyword (substring) matching algorithm will run and it will display a summary of how many URLs there were and how many had matching keywords.
@@ -59,7 +59,7 @@ TO USE IT:
     - You have the option of viewing the JSON format, which provides a compact view of the URLs, their matching keywords (substrings) --- if any --- and the runtime (how many milliseconds it took to find matching keywords).
     - The text displays the same information. It's just bulkier because of the extra styling.
 
-    - ***Note:*** *Each run, will replace these files, so move them somewhere else or rename them if you want to run the algorithm more than once (you don't have to stop the CLI to move the result files).*
+    - ***Note:*** * THese files will get replaced each time the CLI restarts, so move them somewhere else or rename them if you want to run the algorithm more than once (you don't have to stop the CLI to move the result files).*
 
 10. Afterwards, the CLI will give the option of starting from the beginning, entering new URLs while using the same keywords, or exiting/quitting. Starting over allows you to change the keywords you want to use, but you must still exit the CLI to make changes to keywords.txt.
 
@@ -131,7 +131,7 @@ If you want to interact with the CLI ***and*** you want to use files to supply y
      5. Make sure that all of the keywords (substrings) are on separate lines without single or double quotes around them.
      6. Now, move your file to the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory.
      7. Rename it to 'keywords.txt'.
-     8. ***NOTE:*** *As an alternative to steps (6), you can edit the value for the DEFAULT_KEYWORDS_FILE constant in 'substring_matcher/constants.py' by changing it to the name of your file. It must still be a text file with the .txt extension, however.*
+     8. ***NOTE:*** *As an alternative to step (6), you can edit the value for the DEFAULT_KEYWORDS_FILE constant in 'substring_matcher/constants.py' by changing it to the name of your file. It must still be a text file with the .txt extension, however.*
    
 2. If you plan to use a file for your URLs, you need to add the URLs to the urls.txt file. If not, then skip this step.
    - From the project's root directory, navigate to the 'data' directory.
@@ -143,7 +143,9 @@ If you want to interact with the CLI ***and*** you want to use files to supply y
      4. Make sure that all of the URLs are on separate lines without single or double quotes around them.
      5. Move it to the 'ROCKERBOX_CHALLENGE/substring_matcher/data' directory.
      6. Rename it to 'urls.txt.'
-     7. ***NOTE:*** *As an alternative to steps (6), you can change the value for the DEFAULT_URLS_FILE constant in 'substring_matcher/constants.py' to be the name of your file. It must still be a text file with the .txt extension, however.*
+     7. ***NOTE:*** *As an alternative to step (6), you can change the value for the DEFAULT_URLS_FILE constant in 'substring_matcher/constants.py' to be the name of your file. It must still be a text file with the .txt extension, however.*
+
+***NOTE:*** *You can modify the keywords.txt and urls.txt files while the CLI script is waiting for you to select an option (i.e. you do not need to restart the CLI).*
    
 3. Using the command line, make sure you are in the 'ROCKERBOX_CHALLENGE' (root) directory.
 4. Type `python3.9 cli.py` into the command line and press the 'Enter' or 'Return' key.
@@ -180,3 +182,5 @@ The Url Substring Matcher project has an AGPL-3.0 license. You may view the cont
 6. I will consider adding more validations for the keywords. Currently, it validates for a lot, but still allows single valid characters through. I may limit this to specific characters, or not allow single characters at all. I am allowing them for now because, technically, there is a chance users want search URLs to see if they contain a specific valid character.
 
 7. Add validation for checking if the results directory and the data directory with its relevant files (keywords.txt & urls.txt) are present. Display a user friendly warning to let them know what went wrong instead of allowing a hard crash to occur.
+
+8. Clean up the code by making it even more DRY and reducing the size of classes by splitting them into other classes that can be inherited.
