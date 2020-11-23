@@ -69,31 +69,33 @@ class Trie:
         url = url.lower()
         current_substring: str = ''
         matching_keywords: list[str] = []
-        current_node: TrieNode = self.root
+        parent_node: TrieNode = self.root
 
         for index, outer_character in enumerate(url):
-            if outer_character in current_node.children:
+            if outer_character in parent_node.children:
                 current_substring += outer_character
-                current_node = current_node.children[outer_character]
+                parent_node = parent_node.children[outer_character]
+                remaining_url = url[index+1:]
 
                 # Iterates over the remaining part of the string
                 # instead of starting at the beginning.
-                for inner_character in url[index+1:]:
-                    if current_node.is_end_of_word:
+                for inner_character in remaining_url:
+                    if parent_node.is_end_of_word:
                         matching_keywords.append(current_substring)
 
-                    if inner_character in current_node.children:
+                    if inner_character in parent_node.children:
                         current_substring += inner_character
-                        current_node = current_node.children[inner_character]
+                        parent_node = parent_node.children[inner_character]
 
                     # resets variable values and breaks out of the inner loop
                     else:
-                        current_substring = ''
-                        current_node = self.root
                         break
                 else:
-                    if current_substring and current_node.is_end_of_word:
+                    if current_substring and parent_node.is_end_of_word:
                         matching_keywords.append(current_substring)
+
+                current_substring = ''
+                parent_node = self.root
 
         return sorted(list(set(matching_keywords)))
 
