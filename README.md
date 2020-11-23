@@ -33,9 +33,14 @@ One of the scenarios where a more optimal algorithm will become necessary is whe
 <br>(2) By using the development version (the raw code)
 
 ### **EXECUTABLE VERSION (DISTRIBUTABLE)**
+
+NOTE: I gitignored this, but may upload it as part of a separate directory.
 This requires less work to setup, but it limits what users can or cannot do. The executable version can be found inside the 'dist' directory, which is located inside of the project's root directory. 'Dist' stands for distributable. It contains another directory called 'cli.' This contains a number of scary looking files, but also one file named 'cli.' This is the executable file you will use to launch the script for finding keyword matches in URLs.
 
-To use it:
+TO USE IT:
+
+***NOTE**: *If you want to use file for the keywords (substrings) or URLs, you need to follow steps (5), (6), and (8) now-- before starting the CLI.*
+<br>
 1. Double click on the file named **cli**, located in the 'ROCKERBOX_CHALLENGE/dist/cli' directory.
 2. It will launch the terminal (the command line on Mac OS).
 3. Once it presents the welcome message, press the 'Enter' or 'Return' key.
@@ -46,9 +51,9 @@ To use it:
    - If you want to use your own file, then rename or delete the 'keywords.txt' in this directory.
    - Then convert your file to a plain text file with the .txt extension and rename it to 'keywords.txt.'
    - You still need to make sure that your keywords are all on separate lines.
-   - ***Note:*** *You can modify the keywords.txt file while the script is waiting for you to select and option (i.e. you do not need to restart it).*
+   - ***NOTE:*** *You **cannot** modify the keywords.txt file while the CLI script is waiting for you to select an option (i.e. you do need to restart the CLI).*
 7. Once you are done with that step, the CLI will ask you if you want to use a text file for your list of URLs or if you want to enter them manually.
-8. Steps (4), (5), and (6) apply for the URLs as well, so you can follow those. Just make sure you are editing or replacing the 'urls.txt' file inside of the 'ROCKERBOX_CHALLENGE/dist/cli/substring_matcher/data' directory.
+8. Steps (5) and (6) apply for the URLs as well, so you can follow those. Just make sure you are editing or replacing the 'urls.txt' file inside of the 'ROCKERBOX_CHALLENGE/dist/cli/substring_matcher/data' directory.
 9.  Once you complete that step, the keyword (substring) matching algorithm will run and it will display a summary of how many URLs there were and how many had matching keywords.
     - For more details, navigate to the 'results' directory, located at ROCKERBOX_CHALLENGE/dist/cli/substring_matcher.'
     - You have the option of viewing the JSON format, which provides a compact view of the URLs, their matching keywords (substrings) --- if any --- and the runtime (how many milliseconds it took to find matching keywords).
@@ -56,7 +61,7 @@ To use it:
 
     - ***Note:*** *Each run, will replace these files, so move them somewhere else or rename them if you want to run the algorithm more than once (you don't have to stop the CLI to move the result files).*
 
-10. Afterwards, the CLI will give the option of starting from the beginning, entering new URLs while using the same keywords, or exiting/quitting. Starting over allows you to change the keywords you want to use (but, if you chose to use the keywords.txt file, you can just modify that without starting over).
+10. Afterwards, the CLI will give the option of starting from the beginning, entering new URLs while using the same keywords, or exiting/quitting. Starting over allows you to change the keywords you want to use, but you must still exit the CLI to make changes to keywords.txt.
 
 
 
@@ -109,7 +114,7 @@ You can find them inside of the 'constants.py' file of the 'substring_matcher' d
 <br>
 
 #### Running the Command Line Interface (CLI):
-If you want to interact with the CLI and you want to use files to supply your keywords and URLs, you should take a moment to set up the relevant files before using it. Steps (1) and (2) cover how to do this.
+If you want to interact with the CLI ***and*** you want to use files to supply your keywords and URLs, you should take a moment to set up the relevant files before using it. Steps (1) and (2) cover how to do this.
 
 *NOTE: If you do not plan on using files for your keywords and URLs (i.e. you want to enter the keywords and URLs via the command line), you can skip steps (1) and (2).*
 <br>
@@ -128,7 +133,7 @@ If you want to interact with the CLI and you want to use files to supply your ke
      7. Rename it to 'keywords.txt'.
      8. ***NOTE:*** *As an alternative to steps (6), you can edit the value for the DEFAULT_KEYWORDS_FILE constant in 'substring_matcher/constants.py' by changing it to the name of your file. It must still be a text file with the .txt extension, however.*
    
-2. If you plan to use a file for your URLs, you need to add the URLs to the keywords.txt file. If not, then skip this step.
+2. If you plan to use a file for your URLs, you need to add the URLs to the urls.txt file. If not, then skip this step.
    - From the project's root directory, navigate to the 'data' directory.
    - Open the 'urls.txt' file and add your URLs there. Each URL should be on a new line.
    - OR, if you want to use a text file you already have:
@@ -170,4 +175,8 @@ The Url Substring Matcher project has an AGPL-3.0 license. You may view the cont
    
 4. Provide unique names for the result files, add timestamps, and potentially move them to another folder when the program ends.
 
-5. Validate URLs and keywords. I did not do it in this instance because the requirements did not ask for it. It's a simple addition.
+5. Add validations for URLs. I did not do it in this instance because the requirements did not ask for it.
+
+6. I will consider adding more validations for the keywords. Currently, it validates for a lot, but still allows single valid characters through. I may limit this to specific characters, or not allow single characters at all. I am allowing them for now because, technically, there is a chance users want search URLs to see if they contain a specific valid character.
+
+7. Add validation for checking if the results directory and the data directory with its relevant files (keywords.txt & urls.txt) are present. Display a user friendly warning to let them know what went wrong instead of allowing a hard crash to occur.
