@@ -54,7 +54,7 @@ class SubstringMatcherCli:
         self.keywords: list[str] = []
         self.urls: list[str] = []
         self.keyword_search_results: dict = {}
-        self.invalid_keywords = []
+        self.invalid_keywords: list = []
 
     def start_cli(self):
         """Welcomes the user and presents a menu."""
@@ -147,7 +147,7 @@ class SubstringMatcherCli:
         display_confirmation_message_for_keywords(
             self.keywords, self.invalid_keywords
         )
-        self.user_input = input('Continue?: ')
+        self.user_input = input('\nContinue?: ')
 
     def handle_keyword_confirmation(self):
         """
@@ -157,8 +157,7 @@ class SubstringMatcherCli:
         if self.user_input.lower() in VALID_RESPONSES_FOR_YES:
             display_waiting_message_while_building_trie()
             self.trie_builder.user_keywords = self.keywords
-            self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_list()
-            self.trie_builder.invalid_keywords = []
+            self.trie = self.trie_builder.build_trie_from_list()[0]
             self.handle_displaying_invalid_keywords_message()
             display_ready_message_for_finding_keywords_in_url()
             display_menu_options_for_url_source()
@@ -415,6 +414,7 @@ class SubstringMatcherCli:
         self.url_input = ""
         self.keywords = []
         self.urls = []
+        self.invalid_keywords = []
         self.keyword_search_results = {}
 
 
