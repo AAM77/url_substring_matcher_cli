@@ -78,6 +78,7 @@ class SubstringMatcherCli:
         if self.user_input == '1':
             display_waiting_message_while_building_trie()
             self.trie_builder.file_name = DEFAULT_KEYWORDS_FILE
+            self.trie_builder.user_keywords = self.keywords
             self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_file()
             self.trie_builder.invalid_keywords = []
             self.handle_displaying_invalid_keywords_message()
@@ -134,8 +135,9 @@ class SubstringMatcherCli:
                 self.add_keyword_to_appropriate_list(formatted_keyword)
 
     def add_keyword_to_appropriate_list(self, formatted_keyword):
-        if self.is_valid_keyword(formatted_keyword) and formatted_keyword not in self.keywords:
-            self.keywords.append(formatted_keyword)
+        if self.is_valid_keyword(formatted_keyword):
+            if formatted_keyword not in self.keywords:
+                self.keywords.append(formatted_keyword)
         else:
             if formatted_keyword not in self.invalid_keywords:
                 self.invalid_keywords.append(formatted_keyword)
@@ -159,6 +161,7 @@ class SubstringMatcherCli:
             display_waiting_message_while_building_trie()
             self.trie_builder.user_keywords = self.keywords
             self.trie = self.trie_builder.build_trie_from_list()[0]
+            self.trie_builder.invalid_keywords = []
             self.handle_displaying_invalid_keywords_message()
             display_ready_message_for_finding_keywords_in_url()
             display_menu_options_for_url_source()
@@ -417,6 +420,9 @@ class SubstringMatcherCli:
         self.urls = []
         self.invalid_keywords = []
         self.keyword_search_results = {}
+        self.trie_builder.user_keywords = []
+        self.trie_builder.invalid_keywords = []
+        self.trie_builder.trie = Trie()
 
 
 def main():
