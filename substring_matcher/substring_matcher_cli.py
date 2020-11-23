@@ -33,7 +33,7 @@ from substring_matcher.utils.cli_messages import (
     display_warning_to_request_more_keywords,
     display_warning_to_request_more_urls,
     display_waiting_message_during_keyword_matching,
-    display_welcome_message,
+    display_welcome_message
 )
 from substring_matcher.utils.file_paths import resource_path
 
@@ -64,52 +64,10 @@ class SubstringMatcherCli:
         self.request_user_input()
         self.handle_response_to_keyword_options()
 
-    def reset_values(self):
-        """Resets all values to their default state."""
-        self.user_input = ""
-        self.keyword_input = ""
-        self.url_input = ""
-        self.keywords = []
-        self.urls = []
-        self.keyword_search_results = {}
-
-    def does_user_want_to_start_over(self):
-        """
-        Handles what happens once the program finishes
-        running (i.e. searching URLs for matches).
-        """
-        self.reset_values()
-        display_options_for_starting_over()
-        self.request_user_input()
-        self.handle_user_response_for_starting_over()
-
-    def handle_user_response_for_starting_over():
-        if self.user_input == '1':
-            self.start_cli()
-
-        elif self.user_input == '2':
-            display_menu_options_for_url_source()
-            self.request_user_input()
-            self.handle_response_to_url_options()
-
-        else:
-            self.check_if_user_wants_to_exit()
-            display_incorrect_response_alert()
-            self.does_user_want_to_start_over()
-
     def request_user_input(self):
         """Requests input from the user."""
         display_reminder_for_exiting_the_application()
         self.user_input = input("\nPlease enter your choice: ")
-
-    def check_if_user_wants_to_exit(self):
-        """
-        Checks and exits if the user has provided 'exit' or 'quit'
-        as the input through the command line.
-        """
-        if self.user_input in ['exit', 'quit']:
-            display_farewell_message()
-            sys.exit()
 
     def handle_response_to_keyword_options(self):
         """
@@ -138,11 +96,6 @@ class SubstringMatcherCli:
             self.request_user_input()
             self.handle_response_to_keyword_options()
 
-    def clear_keyword_input_and_keywords(self):
-        """Clears the following instance variables."""
-        self.keyword_input = ''
-        self.keywords = []
-
     def request_keywords(self):
         """
         Requests a list of keywords from the user
@@ -152,13 +105,10 @@ class SubstringMatcherCli:
         display_help_tips_for_keyword_input()
         self.keyword_input = input('Your keywords: ')
 
-    def create_keyword_list(self):
-        self.keywords = [keyword.strip(
-        ) for keyword in self.keyword_input.lower().split('|') if keyword.strip() != '']
-
-    def request_keyword_confirmation(self) -> str:
-        display_confirmation_message_for_keywords(keywords)
-        self.user_input = input('Enter yes or no (y/n): ')
+    def clear_keyword_input_and_keywords(self):
+        """Clears the following instance variables."""
+        self.keyword_input = ''
+        self.keywords = []
 
     def handle_keyword_input(self):
         """
@@ -174,6 +124,14 @@ class SubstringMatcherCli:
             display_warning_to_request_more_keywords()
             self.request_keywords()
             self.handle_keyword_input()
+
+    def create_keyword_list(self):
+        self.keywords = [keyword.strip(
+        ) for keyword in self.keyword_input.lower().split('|') if keyword.strip() != '']
+
+    def request_keyword_confirmation(self) -> str:
+        display_confirmation_message_for_keywords(self.keywords)
+        self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_keyword_confirmation(self):
         """
@@ -214,7 +172,7 @@ class SubstringMatcherCli:
             self.process_search_results_data_for_json_file()
             self.process_search_results_data_for_text_file()
             self.handle_displaying_search_results_summary()
-            self.does_user_want_to_start_over()
+            self.handle_restarting_cli_on_completion()
 
         elif self.user_input == '2':
             self.request_urls()
@@ -226,11 +184,6 @@ class SubstringMatcherCli:
             display_menu_options_for_url_source()
             self.request_user_input()
             self.handle_response_to_url_options()
-
-    def reset_urls_and_url_input(self):
-        """Resets the values for the url and its input"""
-        self.url_input = ''
-        self.urls = []
 
     def request_urls(self):
         """Requests urls from the user through the command line."""
@@ -278,7 +231,7 @@ class SubstringMatcherCli:
             self.process_search_results_data_for_json_file()
             self.process_search_results_data_for_text_file()
             self.handle_displaying_search_results_summary()
-            self.does_user_want_to_start_over()
+            self.handle_restarting_cli_on_completion()
 
         elif self.user_input.lower() in VALID_RESPONSES_FOR_NO:
             self.request_urls()
@@ -290,6 +243,11 @@ class SubstringMatcherCli:
             display_incorrect_response_alert()
             self.handle_url_input()
             self.handle_url_confirmation()
+
+    def reset_urls_and_url_input(self):
+        """Resets the values for the url and its input"""
+        self.url_input = ''
+        self.urls = []
 
     def search_urls_file_for_matching_keywords(self, file_name: str = DEFAULT_URLS_FILE) -> dict:
         """
@@ -349,9 +307,9 @@ class SubstringMatcherCli:
             os.remove(search_results_json_path)
 
         with open(search_results_json_path, 'w') as json_file:
-            self.write_url_keyword_match_data_to_file(json_file)
+            self.write_url_keyword_match_data_to_file_as_json(json_file)
 
-    def write_url_keyword_match_data_to_file(self, json_file):
+    def write_url_keyword_match_data_to_file_as_json(self, json_file):
         json_data = json.dumps(self.keyword_search_results, indent=3)
         json_file.write(json_data)
 
@@ -363,9 +321,9 @@ class SubstringMatcherCli:
             os.remove(search_results_text_path)
 
         with open(search_results_text_path, 'w') as text_file:
-            self.write_url_keyword_match_data_to_file(text_file)
+            self.write_url_keyword_match_data_to_file_as_text(text_file)
 
-    def write_url_keyword_match_data_to_file(self, text_file):
+    def write_url_keyword_match_data_to_file_as_text(self, text_file):
         original_stdout = sys.stdout
         sys.stdout = text_file
 
@@ -400,6 +358,48 @@ class SubstringMatcherCli:
             )
         else:
             print('All keywords are valid!')
+
+    def handle_restarting_cli_on_completion(self):
+        """
+        Handles what happens once the program finishes
+        running (i.e. searching URLs for matches).
+        """
+        self.reset_values()
+        display_options_for_starting_over()
+        self.request_user_input()
+        self.handle_user_response_for_starting_over()
+
+    def handle_user_response_for_starting_over(self):
+        if self.user_input == '1':
+            self.start_cli()
+
+        elif self.user_input == '2':
+            display_menu_options_for_url_source()
+            self.request_user_input()
+            self.handle_response_to_url_options()
+
+        else:
+            self.check_if_user_wants_to_exit()
+            display_incorrect_response_alert()
+            self.handle_restarting_cli_on_completion()
+
+    def check_if_user_wants_to_exit(self):
+        """
+        Checks and exits if the user has provided 'exit' or 'quit'
+        as the input through the command line.
+        """
+        if self.user_input in ['exit', 'quit']:
+            display_farewell_message()
+            sys.exit()
+
+    def reset_values(self):
+        """Resets all values to their default state."""
+        self.user_input = ""
+        self.keyword_input = ""
+        self.url_input = ""
+        self.keywords = []
+        self.urls = []
+        self.keyword_search_results = {}
 
 
 def main():
