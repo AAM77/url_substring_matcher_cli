@@ -33,7 +33,7 @@ class TrieBuilder:
         keywords_file_path: str = resource_path(
             f"{SUBSTRING_MATCHER_DATA_PATH}/{self.file_name}")
         self.process_keywords_file(keywords_file_path)
-        self.reset_current_normalizd_keyword()
+        self.reset_current_normalized_keyword()
 
         return (self.trie, self.invalid_keywords)
 
@@ -60,7 +60,7 @@ class TrieBuilder:
             self.current_normalized_keyword = keyword.lower().strip()
             self.filter_valid_keywords()
 
-        self.reset_current_normalizd_keyword()
+        self.reset_current_normalized_keyword()
 
         return (self.trie, self.invalid_keywords)
 
@@ -89,5 +89,5 @@ class TrieBuilder:
 
         return bool(re.match("^[A-Za-z_-]*$", self.current_normalized_keyword))
 
-    def reset_current_normalizd_keyword(self):
+    def reset_current_normalized_keyword(self):
         self.current_normalized_keyword = ""
