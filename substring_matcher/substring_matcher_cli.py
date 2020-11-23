@@ -12,7 +12,7 @@ from substring_matcher.constants import (
     VALID_RESPONSES_FOR_YES
 )
 from substring_matcher.trie import Trie, TrieNode
-from substring_matcher.trie_builders import build_trie_from_file, build_trie_from_list
+from substring_matcher.trie_builder import TrieBuilder
 from substring_matcher.utils.cli_messages import (
     display_farewell_message,
     display_incorrect_response_alert,
@@ -31,13 +31,14 @@ class SubstringMatcherCli:
 
     def __init__(self):
         self.trie: Trie = None
+        self.trie_builder: TrieBuilder = TrieBuilder()
         self.user_input: str = ""
         self.keyword_input: str = ""
         self.url_input: str = ""
         self.keywords: list[str] = []
         self.urls: list[str] = []
         self.keyword_search_results: dict = {}
-        self.working_directory: str = os.getcwd()
+        self.invalid_keywords = []
 
     def start_cli(self):
         """Welcomes the user and presents a menu."""
@@ -105,8 +106,11 @@ class SubstringMatcherCli:
         if self.user_input == '1':
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('\nOne moment while we load your keywords into the system...')
-            self.trie = build_trie_from_file(DEFAULT_KEYWORDS_FILE)
-            print('You are now ready to search URLs for keywords.')
+            self.trie_builder.file_name = DEFAULT_KEYWORDS_FILE
+            self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_file()
+            self.trie_builder.invalid_keywords = []
+            self.handle_displaying_invalid_keywords()
+            print('\nYou are now ready to search URLs for keywords.')
             display_menu_options_for_url_source()
             self.request_user_input()
             self.handle_response_to_url_options()
@@ -173,8 +177,11 @@ class SubstringMatcherCli:
         if self.user_input.lower() in VALID_RESPONSES_FOR_YES:
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('\nOne moment while we load your keywords into the system...')
-            self.trie = build_trie_from_list(self.keywords)
-            print('You are now ready to search URLs for keywords.')
+            self.trie_builder.user_keywords = self.keywords
+            self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_list()
+            self.trie_builder.invalid_keywords = []
+            self.handle_displaying_invalid_keywords()
+            print('\nYou are now ready to search URLs for keywords.')
             display_menu_options_for_url_source()
             self.request_user_input()
             self.handle_response_to_url_options()
@@ -199,7 +206,7 @@ class SubstringMatcherCli:
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print("\nOne moment while we search the URLs for keyword matches...")
             self.search_urls_file_for_matching_keywords(DEFAULT_URLS_FILE)
-            print("\nDONE! Here are your results:")
+            print("DONE! Here are your results:")
             print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             self.send_search_results_data_to_json_file()
             self.send_search_results_data_to_text_file()
@@ -382,14 +389,25 @@ class SubstringMatcherCli:
             url for url, data in self.keyword_search_results.items() if data['matches']]
         number_of_urls_with_matches = len(urls_with_matching_keywords)
 
-        print("\n######################################")
-        print("######################################")
-        print(f"## Total number of urls: {len(self.keyword_search_results)}")
-        print(f"## URLs with Matching Keywords: {number_of_urls_with_matches}")
-        print("##")
-        print("## See the 'results' directory in 'substring_matcher' for result details.")
-        print("######################################")
-        print("######################################\n")
+        print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print(f"Total number of urls: {len(self.keyword_search_results)}")
+        print(f"URLs with Matching Keywords: {number_of_urls_with_matches}")
+        print(
+            ">> See the 'results' directory in 'substring_matcher' for result details. <<")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+
+    def handle_displaying_invalid_keywords(self):
+        if self.invalid_keywords:
+            print("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(
+                f"!! Found {len(self.invalid_keywords)} invalid keyword(s)!")
+            print("!!")
+            print(f"!! {self.invalid_keywords}")
+            print("!!")
+            print("!! They will be ignored during the matching process.")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        else:
+            print('All keywords are valid!')
 
 
 def main():
