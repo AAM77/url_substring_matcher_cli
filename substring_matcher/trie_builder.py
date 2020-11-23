@@ -43,10 +43,14 @@ class TrieBuilder:
         the keyword to the Trie if it is valid. It closes
         the file once finished.
         """
+        processed_keywords = {}
         with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
             for keyword in keywords_file:
                 self.current_normalized_keyword = keyword.lower().strip()
-                self.filter_valid_keywords()
+
+                if not processed_keywords.get(self.current_normalized_keyword):
+                    processed_keywords[self.current_normalized_keyword] = 1
+                    self.add_keyword_to_appropriate_list()
 
     def build_trie_from_list(self) -> tuple:
         """
@@ -56,15 +60,19 @@ class TrieBuilder:
         if not isinstance(self.user_keywords, list):
             raise TypeError
 
+        processed_keywords = {}
         for keyword in self.user_keywords:
             self.current_normalized_keyword = keyword.lower().strip()
-            self.filter_valid_keywords()
+
+            if not processed_keywords.get(self.current_normalized_keyword):
+                processed_keywords[self.current_normalized_keyword] = 1
+                self.add_keyword_to_appropriate_list()
 
         self.reset_current_normalized_keyword()
 
         return (self.trie, self.invalid_keywords)
 
-    def filter_valid_keywords(self):
+    def add_keyword_to_appropriate_list(self):
         """
         Adds valid keywords to the trie and
         move invalid keywords to a separate list.
