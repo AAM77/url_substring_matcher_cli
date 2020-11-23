@@ -111,6 +111,7 @@ class SubstringMatcherCli:
         """Clears the following instance variables."""
         self.keyword_input = ''
         self.keywords = []
+        self.invalid_keywords = []
 
     def handle_keyword_input(self):
         """
