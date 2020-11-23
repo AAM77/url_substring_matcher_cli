@@ -1,3 +1,8 @@
+# I alphabetized the functions in this file since
+# they simply handle displaying messages. Also, functions
+# with similar messages share the same naming pattern,
+# so they are likely to be grouped together, anyway.
+
 def display_confirmation_message_for_keywords(keywords):
     print(f'\nAre {keywords} the keywords you entered? (y/n)')
 
