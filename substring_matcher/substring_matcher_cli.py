@@ -232,7 +232,7 @@ class SubstringMatcherCli:
         the list of urls provided.
         """
         display_confirmation_message_for_urls(self.urls)
-        self.user_input = input('Enter yes or no (y/n): ')
+        self.user_input = input('\nEnter yes or no (y/n): ')
 
     def handle_url_confirmation(self):
         """
