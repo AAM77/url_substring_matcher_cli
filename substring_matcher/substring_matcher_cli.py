@@ -14,11 +14,26 @@ from substring_matcher.constants import (
 from substring_matcher.trie import Trie, TrieNode
 from substring_matcher.trie_builder import TrieBuilder
 from substring_matcher.utils.cli_messages import (
+    display_confirmation_message_for_keywords,
+    display_confirmation_message_for_urls,
     display_farewell_message,
+    display_help_tips_for_keyword_input,
+    display_help_tips_for_url_input,
     display_incorrect_response_alert,
+    display_invalid_keyword_info,
     display_menu_options_for_keyword_source,
     display_menu_options_for_url_source,
-    display_welcome_message
+    display_options_for_starting_over,
+    display_ready_message_for_finding_keywords_in_url,
+    display_reminder_for_exiting_the_application,
+    display_search_completion_notification,
+    display_search_results_summary,
+    display_url_keyword_match_data_in_file,
+    display_waiting_message_while_building_trie,
+    display_warning_to_request_more_keywords,
+    display_warning_to_request_more_urls,
+    display_waiting_message_during_keyword_matching,
+    display_welcome_message,
 )
 from substring_matcher.utils.file_paths import resource_path
 
@@ -64,12 +79,11 @@ class SubstringMatcherCli:
         running (i.e. searching URLs for matches).
         """
         self.reset_values()
-
-        print("Do you want to:")
-        print("[1] Start from the beginning")
-        print("[2] Provide different URLs")
+        display_options_for_starting_over()
         self.request_user_input()
+        self.handle_user_response_for_starting_over()
 
+    def handle_user_response_for_starting_over():
         if self.user_input == '1':
             self.start_cli()
 
@@ -85,8 +99,7 @@ class SubstringMatcherCli:
 
     def request_user_input(self):
         """Requests input from the user."""
-
-        print(">>> Reminder: Enter 'exit' or 'quit' to exit the program. <<<")
+        display_reminder_for_exiting_the_application()
         self.user_input = input("\nPlease enter your choice: ")
 
     def check_if_user_wants_to_exit(self):
@@ -104,13 +117,12 @@ class SubstringMatcherCli:
         choice for the keyword options menu.
         """
         if self.user_input == '1':
-            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print('\nOne moment while we load your keywords into the system...')
+            display_waiting_message_while_building_trie()
             self.trie_builder.file_name = DEFAULT_KEYWORDS_FILE
             self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_file()
             self.trie_builder.invalid_keywords = []
-            self.handle_displaying_invalid_keywords()
-            print('\nYou are now ready to search URLs for keywords.')
+            self.handle_displaying_invalid_keywords_message()
+            display_ready_message_for_finding_keywords_in_url()
             display_menu_options_for_url_source()
             self.request_user_input()
             self.handle_response_to_url_options()
@@ -137,11 +149,7 @@ class SubstringMatcherCli:
         through the command line.
         """
         self.clear_keyword_input_and_keywords()
-
-        print("\nEnter keywords separated by pipes (i.e. ' | ' ).")
-        print("Example 1: Hello|Hi|welcome")
-        print("Example 2: Hello | Hi | welcome")
-        print("NOTE: Whitespace (e.g. spaces) will get stripped out since they do not belong in a url.\n")
+        display_help_tips_for_keyword_input()
         self.keyword_input = input('Your keywords: ')
 
     def create_keyword_list(self):
@@ -149,7 +157,7 @@ class SubstringMatcherCli:
         ) for keyword in self.keyword_input.lower().split('|') if keyword.strip() != '']
 
     def request_keyword_confirmation(self) -> str:
-        print(f'\nAre {self.keywords} the keywords you entered? (y/n)')
+        display_confirmation_message_for_keywords(keywords)
         self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_keyword_input(self):
@@ -163,9 +171,7 @@ class SubstringMatcherCli:
             self.request_keyword_confirmation()
             self.handle_keyword_confirmation()
         else:
-            print("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("!! You must provide at least one keyword. !!")
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            display_warning_to_request_more_keywords()
             self.request_keywords()
             self.handle_keyword_input()
 
@@ -175,13 +181,12 @@ class SubstringMatcherCli:
         responses to the request for keyword confirmation.
         """
         if self.user_input.lower() in VALID_RESPONSES_FOR_YES:
-            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print('\nOne moment while we load your keywords into the system...')
+            display_waiting_message_while_building_trie()
             self.trie_builder.user_keywords = self.keywords
             self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_list()
             self.trie_builder.invalid_keywords = []
-            self.handle_displaying_invalid_keywords()
-            print('\nYou are now ready to search URLs for keywords.')
+            self.handle_displaying_invalid_keywords_message()
+            display_ready_message_for_finding_keywords_in_url()
             display_menu_options_for_url_source()
             self.request_user_input()
             self.handle_response_to_url_options()
@@ -203,14 +208,12 @@ class SubstringMatcherCli:
         choice for the URL options menu.
         """
         if self.user_input == '1':
-            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print("\nOne moment while we search the URLs for keyword matches...")
+            display_waiting_message_during_keyword_matching()
             self.search_urls_file_for_matching_keywords(DEFAULT_URLS_FILE)
-            print("DONE! Here are your results:")
-            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            self.send_search_results_data_to_json_file()
-            self.send_search_results_data_to_text_file()
-            self.display_search_results_summary()
+            display_search_completion_notification()
+            self.process_search_results_data_for_json_file()
+            self.process_search_results_data_for_text_file()
+            self.handle_displaying_search_results_summary()
             self.does_user_want_to_start_over()
 
         elif self.user_input == '2':
@@ -232,11 +235,7 @@ class SubstringMatcherCli:
     def request_urls(self):
         """Requests urls from the user through the command line."""
         self.reset_urls_and_url_input()
-
-        print("\nEnter URLs separated by pipes (i.e. ' | ' ).")
-        print("Example 1: http://Hello.com|Hi.net|www.welcome.com")
-        print("Example 2: http://Hello.com | Hi.net | www.welcome.com")
-        print("NOTE: Whitespace (e.g. spaces) will get stripped out since they do not belong in a url.\n")
+        display_help_tips_for_url_input()
         self.url_input = input('Your URLs: ')
 
     def handle_url_input(self):
@@ -250,9 +249,7 @@ class SubstringMatcherCli:
             self.request_url_confirmation()
             self.handle_url_confirmation()
         else:
-            print("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("!! You must provide at least one URL. !!")
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            display_warning_to_request_more_urls()
             self.request_urls()
             self.handle_url_input()
 
@@ -266,7 +263,7 @@ class SubstringMatcherCli:
         Requests confirmation from the user regarding
         the list of urls provided.
         """
-        print(f'\nAre {self.urls} the urls you entered? (y/n)')
+        display_confirmation_message_for_urls(self.urls)
         self.user_input = input('Enter yes or no (y/n): ')
 
     def handle_url_confirmation(self):
@@ -275,13 +272,12 @@ class SubstringMatcherCli:
         responses to the request for URL confirmation.
         """
         if self.user_input.lower() in VALID_RESPONSES_FOR_YES:
-            print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print("\nOne moment while we search the URLs for keyword matches...")
+            display_waiting_message_during_keyword_matching()
             self.search_url_list_for_matching_keywords()
-            print("\nDONE! Here are your results:")
-            self.send_search_results_data_to_json_file()
-            self.send_search_results_data_to_text_file()
-            self.display_search_results_summary()
+            display_search_completion_notification()
+            self.process_search_results_data_for_json_file()
+            self.process_search_results_data_for_text_file()
+            self.handle_displaying_search_results_summary()
             self.does_user_want_to_start_over()
 
         elif self.user_input.lower() in VALID_RESPONSES_FOR_NO:
@@ -310,6 +306,7 @@ class SubstringMatcherCli:
 
         with open(urls_file_path, 'r', encoding='utf-8') as urls_file:
             for url in urls_file:
+                self.current_url = url
                 self.add_keyword_match_data_to_search_results(url.strip())
 
     def search_url_list_for_matching_keywords(self) -> dict:
@@ -320,6 +317,7 @@ class SubstringMatcherCli:
             raise TypeError
 
         for url in self.urls:
+            self.current_url = url
             self.add_keyword_match_data_to_search_results(url)
 
     def add_keyword_match_data_to_search_results(self, url: str):
@@ -343,7 +341,7 @@ class SubstringMatcherCli:
 
         return runtime
 
-    def send_search_results_data_to_json_file(self):
+    def process_search_results_data_for_json_file(self):
         search_results_json_path: str = resource_path(
             "substring_matcher/results/keyword_search_results.json")
 
@@ -351,61 +349,55 @@ class SubstringMatcherCli:
             os.remove(search_results_json_path)
 
         with open(search_results_json_path, 'w') as json_file:
-            json_data = json.dumps(self.keyword_search_results, indent=3)
-            json_file.write(json_data)
+            self.write_url_keyword_match_data_to_file(json_file)
 
-    def send_search_results_data_to_text_file(self):
-        original_stdout = sys.stdout
+    def write_url_keyword_match_data_to_file(self, json_file):
+        json_data = json.dumps(self.keyword_search_results, indent=3)
+        json_file.write(json_data)
 
+    def process_search_results_data_for_text_file(self):
         search_results_text_path: str = resource_path(
             "substring_matcher/results/keyword_search_results.txt")
 
         if os.path.exists(search_results_text_path):
             os.remove(search_results_text_path)
 
-        with open(search_results_text_path, 'w') as search_results_file:
-            sys.stdout = search_results_file
+        with open(search_results_text_path, 'w') as text_file:
+            self.write_url_keyword_match_data_to_file(text_file)
 
-            for url, data in self.keyword_search_results.items():
-                print("\n######################################")
-                print("######################################\n")
-                print(f"URL: {url}")
-                print("\nMATCHING KEYWORDS:")
-                print(data.get('matches'))
-                print(
-                    f"\nRuntime: {data.get('runtime')}")
-                print("\n######################################")
-                print("######################################\n")
-                print("\n")
+    def write_url_keyword_match_data_to_file(self, text_file):
+        original_stdout = sys.stdout
+        sys.stdout = text_file
 
-            sys.stdout = original_stdout
+        for url, data in self.keyword_search_results.items():
+            display_url_keyword_match_data_in_file(
+                url, data.get('matches'), data.get('runtime')
+            )
 
-    def display_search_results_summary(self):
+        sys.stdout = original_stdout
+
+    def handle_displaying_search_results_summary(self):
         """
         Loops over a list of URLs and displays the URL
         along with any matching keywords, if any.
         """
         urls_with_matching_keywords = [
-            url for url, data in self.keyword_search_results.items() if data['matches']]
-        number_of_urls_with_matches = len(urls_with_matching_keywords)
+            url for url, data in self.keyword_search_results.items() if data.get('matches')]
 
-        print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print(f"Total number of urls: {len(self.keyword_search_results)}")
-        print(f"URLs with Matching Keywords: {number_of_urls_with_matches}")
-        print(
-            ">> See the 'results' directory in 'substring_matcher' for result details. <<")
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+        total_number_of_urls: int = len(self.keyword_search_results)
+        number_of_urls_with_matches: int = len(urls_with_matching_keywords)
 
-    def handle_displaying_invalid_keywords(self):
+        display_search_results_summary(
+            total_number_of_urls,
+            number_of_urls_with_matches
+        )
+
+    def handle_displaying_invalid_keywords_message(self):
         if self.invalid_keywords:
-            print("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print(
-                f"!! Found {len(self.invalid_keywords)} invalid keyword(s)!")
-            print("!!")
-            print(f"!! {self.invalid_keywords}")
-            print("!!")
-            print("!! They will be ignored during the matching process.")
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            display_invalid_keyword_info(
+                len(self.invalid_keywords),
+                self.invalid_keywords
+            )
         else:
             print('All keywords are valid!')
 
