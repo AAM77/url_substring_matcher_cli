@@ -134,10 +134,11 @@ class SubstringMatcherCli:
                 self.add_keyword_to_appropriate_list(formatted_keyword)
 
     def add_keyword_to_appropriate_list(self, formatted_keyword):
-        if self.is_valid_keyword(formatted_keyword):
+        if self.is_valid_keyword(formatted_keyword) and formatted_keyword not in self.keywords:
             self.keywords.append(formatted_keyword)
         else:
-            self.invalid_keywords.append(formatted_keyword)
+            if formatted_keyword not in self.invalid_keywords:
+                self.invalid_keywords.append(formatted_keyword)
 
     @staticmethod
     def is_valid_keyword(keyword):
