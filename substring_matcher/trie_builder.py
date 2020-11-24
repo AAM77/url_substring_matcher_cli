@@ -3,14 +3,15 @@ from substring_matcher.utils.file_paths import resource_path
 from substring_matcher.trie import Trie
 import os
 import re
+from typing import Set
 
 
 class TrieBuilder:
 
     def __init__(self):
         self.file_name: str = ""
-        self.user_keywords: list = []
-        self.invalid_keywords: list = []
+        self.user_keywords: Set[str] = set()
+        self.invalid_keywords: Set[str] = set()
         self.trie: Trie = Trie()
         self.current_normalized_keyword: str = ""
 
@@ -43,39 +44,31 @@ class TrieBuilder:
         the keyword to the Trie if it is valid. It closes
         the file once finished.
         """
-        processed_keywords = {}
         with open(keywords_file_path, 'r', encoding='utf-8') as keywords_file:
             for keyword in keywords_file:
                 self.current_normalized_keyword = keyword.lower().strip()
-
-                if not processed_keywords.get(self.current_normalized_keyword):
-                    processed_keywords[self.current_normalized_keyword] = 1
-                    self.add_keyword_to_appropriate_list()
+                self.add_keyword_to_appropriate_structure()
 
     def build_trie_from_list(self) -> tuple:
         """
-        Iterates through the provided list of keywords
+        Iterates through the provided set of keywords
         and adds each one to the Trie.
         """
-        if not isinstance(self.user_keywords, list):
+        if not isinstance(self.user_keywords, set):
             raise TypeError
 
-        processed_keywords = {}
         for keyword in self.user_keywords:
             self.current_normalized_keyword = keyword.lower().strip()
-
-            if not processed_keywords.get(self.current_normalized_keyword):
-                processed_keywords[self.current_normalized_keyword] = 1
-                self.add_keyword_to_appropriate_list()
+            self.add_keyword_to_appropriate_structure()
 
         self.reset_current_normalized_keyword()
 
         return (self.trie, self.invalid_keywords)
 
-    def add_keyword_to_appropriate_list(self):
+    def add_keyword_to_appropriate_structure(self):
         """
         Adds valid keywords to the trie and
-        move invalid keywords to a separate list.
+        move invalid keywords to a separate set.
         """
         if not isinstance(self.current_normalized_keyword, str):
             raise TypeError
@@ -83,7 +76,7 @@ class TrieBuilder:
         if self.is_valid_keyword():
             self.trie.add_keyword(self.current_normalized_keyword)
         else:
-            self.invalid_keywords.append(self.current_normalized_keyword)
+            self.invalid_keywords.add(self.current_normalized_keyword)
 
     def is_valid_keyword(self) -> bool:
         """

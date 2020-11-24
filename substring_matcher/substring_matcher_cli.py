@@ -1,19 +1,6 @@
 #!/usr/bin/env python3
 
-import datetime
-import json
-import re
-import os
-import sys
-
-from substring_matcher.constants import (
-    DEFAULT_KEYWORDS_FILE,
-    DEFAULT_URLS_FILE,
-    VALID_RESPONSES_FOR_NO,
-    VALID_RESPONSES_FOR_YES
-)
-from substring_matcher.trie import Trie, TrieNode
-from substring_matcher.trie_builder import TrieBuilder
+from substring_matcher.utils.file_paths import resource_path
 from substring_matcher.utils.cli_messages import (
     display_confirmation_message_for_keywords,
     display_confirmation_message_for_urls,
@@ -36,7 +23,20 @@ from substring_matcher.utils.cli_messages import (
     display_waiting_message_during_keyword_matching,
     display_welcome_message
 )
-from substring_matcher.utils.file_paths import resource_path
+from substring_matcher.trie_builder import TrieBuilder
+from substring_matcher.trie import Trie, TrieNode
+from substring_matcher.constants import (
+    DEFAULT_KEYWORDS_FILE,
+    DEFAULT_URLS_FILE,
+    VALID_RESPONSES_FOR_NO,
+    VALID_RESPONSES_FOR_YES
+)
+import datetime
+import json
+import re
+import os
+import sys
+from typing import Set
 
 
 class SubstringMatcherCli:
@@ -51,10 +51,10 @@ class SubstringMatcherCli:
         self.user_input: str = ""
         self.keyword_input: str = ""
         self.url_input: str = ""
-        self.keywords: list[str] = []
-        self.urls: list[str] = []
+        self.keywords: Set[str] = set()
+        self.urls: Set[str] = set()
         self.keyword_search_results: dict = {}
-        self.invalid_keywords: list = []
+        self.invalid_keywords: Set[str] = set()
 
     def start_cli(self):
         """Welcomes the user and presents a menu."""
@@ -80,7 +80,7 @@ class SubstringMatcherCli:
             self.trie_builder.file_name = DEFAULT_KEYWORDS_FILE
             self.trie_builder.user_keywords = self.keywords
             self.trie, self.invalid_keywords = self.trie_builder.build_trie_from_file()
-            self.trie_builder.invalid_keywords = []
+            self.trie_builder.invalid_keywords = set()
             self.handle_displaying_invalid_keywords_message()
             display_ready_message_for_finding_keywords_in_url()
             display_menu_options_for_url_source()
@@ -110,8 +110,8 @@ class SubstringMatcherCli:
     def clear_keyword_input_and_keywords(self):
         """Clears the following instance variables."""
         self.keyword_input = ''
-        self.keywords = []
-        self.invalid_keywords = []
+        self.keywords = set()
+        self.invalid_keywords = set()
 
     def handle_keyword_input(self):
         """
@@ -137,11 +137,9 @@ class SubstringMatcherCli:
 
     def add_keyword_to_appropriate_list(self, formatted_keyword):
         if self.is_valid_keyword(formatted_keyword):
-            if formatted_keyword not in self.keywords:
-                self.keywords.append(formatted_keyword)
+            self.keywords.add(formatted_keyword)
         else:
-            if formatted_keyword not in self.invalid_keywords:
-                self.invalid_keywords.append(formatted_keyword)
+            self.invalid_keywords.add(formatted_keyword)
 
     @staticmethod
     def is_valid_keyword(keyword):
@@ -162,7 +160,7 @@ class SubstringMatcherCli:
             display_waiting_message_while_building_trie()
             self.trie_builder.user_keywords = self.keywords
             self.trie = self.trie_builder.build_trie_from_list()[0]
-            self.trie_builder.invalid_keywords = []
+            self.trie_builder.invalid_keywords = set()
             self.handle_displaying_invalid_keywords_message()
             display_ready_message_for_finding_keywords_in_url()
             display_menu_options_for_url_source()
@@ -267,7 +265,7 @@ class SubstringMatcherCli:
     def reset_urls_and_url_input(self):
         """Resets the values for the url and its input"""
         self.url_input = ''
-        self.urls = []
+        self.urls = set()
 
     def search_urls_file_for_matching_keywords(self, file_name: str = DEFAULT_URLS_FILE) -> dict:
         """
@@ -305,8 +303,8 @@ class SubstringMatcherCli:
         specified URL.
         """
         self.keyword_search_results[url]: dict = {}
-        self.keyword_search_results[url]['matches']: list = self.trie.find_matching_substrings(
-            url)
+        self.keyword_search_results[url]['matches']: list = list(self.trie.find_matching_substrings(
+            url))
 
         self.keyword_search_results[url][
             'runtime']: str = f"{self.calculate_keyword_search_runtime(url)} milliseconds"
@@ -417,12 +415,12 @@ class SubstringMatcherCli:
         self.user_input = ""
         self.keyword_input = ""
         self.url_input = ""
-        self.keywords = []
-        self.urls = []
-        self.invalid_keywords = []
+        self.keywords = set()
+        self.urls = set()
+        self.invalid_keywords = set()
         self.keyword_search_results = {}
-        self.trie_builder.user_keywords = []
-        self.trie_builder.invalid_keywords = []
+        self.trie_builder.user_keywords = set()
+        self.trie_builder.invalid_keywords = set()
         self.trie_builder.trie = Trie()
 
 

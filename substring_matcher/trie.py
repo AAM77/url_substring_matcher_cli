@@ -1,3 +1,6 @@
+from typing import Set
+
+
 class TrieNode:
     """Each instance represents a node for the trie"""
 
@@ -64,11 +67,11 @@ class Trie:
             raise TypeError
 
         if url == "":
-            return []
+            return {}
 
         url = url.lower()
         current_substring: str = ''
-        matching_keywords: list[str] = []
+        matching_keywords: Set[str] = set()
         parent_node: TrieNode = self.root
 
         for index, outer_character in enumerate(url):
@@ -81,7 +84,7 @@ class Trie:
                 # instead of starting at the beginning.
                 for inner_character in remaining_url:
                     if parent_node.is_end_of_word:
-                        matching_keywords.append(current_substring)
+                        matching_keywords.add(current_substring)
 
                     if inner_character in parent_node.children:
                         current_substring += inner_character
@@ -92,12 +95,12 @@ class Trie:
                         break
                 else:
                     if current_substring and parent_node.is_end_of_word:
-                        matching_keywords.append(current_substring)
+                        matching_keywords.add(current_substring)
 
                 current_substring = ''
                 parent_node = self.root
 
-        return sorted(list(set(matching_keywords)))
+        return matching_keywords
 
     def build_trie_word_list(self, node: TrieNode) -> list:
         """
@@ -105,12 +108,12 @@ class Trie:
         of the words that are inside it.
         """
 
-        trie_words: list = []
+        trie_words: Set[str] = set()
         if node:
             if node.children:
                 for child_node in node.children.values():
                     for char in self.build_trie_word_list(child_node):
-                        trie_words.append(str(child_node.letter) + char)
+                        trie_words.add(str(child_node.letter) + char)
             else:
-                trie_words.append('')
+                trie_words.add('')
         return trie_words

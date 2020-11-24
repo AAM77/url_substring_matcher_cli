@@ -38,7 +38,7 @@ class TestTrie(unittest.TestCase):
     def test_add_keyword(self):
         trie = Trie()
         trie.add_keyword('hello')
-        self.assertEqual(trie.build_trie_word_list(trie.root), ['hello'])
+        self.assertEqual(trie.build_trie_word_list(trie.root), {'hello'})
         self.assertRaises(TypeError, trie.add_keyword, 2)
 
     def test_does_word_exist(self):
@@ -51,42 +51,42 @@ class TestTrie(unittest.TestCase):
         self.assertRaises(TypeError, trie.does_word_exist, 2)
 
     def test_find_matching_substrings_from_list(self):
-        keywords = ['arm', 'army', 'man', 'manly', 'manage',
-                    'manager', 'management', 'woman', 'womanly']
+        keywords = {'arm', 'army', 'man', 'manly', 'manage',
+                    'manager', 'management', 'woman', 'womanly'}
 
         self.trie_builder.user_keywords = keywords
 
         trie, invalid_keywords = self.trie_builder.build_trie_from_list()
 
         self.assertTrue(isinstance(
-            trie.find_matching_substrings(self.mixcase_url), list))
+            trie.find_matching_substrings(self.mixcase_url), set))
 
         self.assertTrue(isinstance(
-            trie.find_matching_substrings(self.lowercase_url), list))
+            trie.find_matching_substrings(self.lowercase_url), set))
 
-        self.assertEqual(trie.find_matching_substrings(self.mixcase_url), [
-                         'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+        self.assertEqual(trie.find_matching_substrings(self.mixcase_url), {
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman'})
 
-        self.assertEqual(trie.find_matching_substrings(self.lowercase_url), [
-                         'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+        self.assertEqual(trie.find_matching_substrings(self.lowercase_url), {
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman'})
 
         self.assertEqual(
             trie.find_matching_substrings(self.url_ending_with_keyword_plus),
-            ['arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
-             'woman', 'womanly', 'womanlyon']
+            {'arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
+             'woman', 'womanly', 'womanlyon'}
         )
 
         self.assertEqual(
             trie.find_matching_substrings(self.url_ending_with_only_keyword),
-            ['arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
-             'woman', 'womanly', 'womanlyon']
+            {'arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
+             'woman', 'womanly', 'womanlyon'}
         )
 
         self.assertEqual(
             trie.find_matching_substrings(self.invalid_url),
-            ['arm', 'cat', 'hello', 'how', 'howdy', 'man', 'manage', 'management',
+            {'arm', 'cat', 'hello', 'how', 'howdy', 'man', 'manage', 'management',
              'manager', 'manly', 'meow', 'mississippi', 'purr-fection', 'super-cat',
-             'super_meow', 'woman', 'womanly', 'womanlyon']
+             'super_meow', 'woman', 'womanly', 'womanlyon'}
         )
 
     def test_find_matching_substrings_from_file(self):
@@ -94,34 +94,34 @@ class TestTrie(unittest.TestCase):
         trie, invalid_keywords = self.trie_builder.build_trie_from_file()
 
         self.assertTrue(isinstance(
-            trie.find_matching_substrings(self.mixcase_url), list))
+            trie.find_matching_substrings(self.mixcase_url), set))
 
         self.assertTrue(isinstance(
-            trie.find_matching_substrings(self.lowercase_url), list))
+            trie.find_matching_substrings(self.lowercase_url), set))
 
-        self.assertEqual(trie.find_matching_substrings(self.mixcase_url), [
-                         'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+        self.assertEqual(trie.find_matching_substrings(self.mixcase_url), {
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman'})
 
-        self.assertEqual(trie.find_matching_substrings(self.lowercase_url), [
-                         'arm', 'man', 'manage', 'management', 'manager', 'woman'])
+        self.assertEqual(trie.find_matching_substrings(self.lowercase_url), {
+                         'arm', 'man', 'manage', 'management', 'manager', 'woman'})
 
         self.assertEqual(
             trie.find_matching_substrings(self.url_ending_with_keyword_plus),
-            ['arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
-             'woman', 'womanly', 'womanlyon']
+            {'arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
+             'woman', 'womanly', 'womanlyon'}
         )
 
         self.assertEqual(
             trie.find_matching_substrings(self.url_ending_with_only_keyword),
-            ['arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
-             'woman', 'womanly', 'womanlyon']
+            {'arm', 'man', 'manage', 'management', 'manager', 'manly', 'mississippi',
+             'woman', 'womanly', 'womanlyon'}
         )
 
         self.assertEqual(
             trie.find_matching_substrings(self.invalid_url),
-            ['arm', 'cat', 'hello', 'how', 'howdy', 'man', 'manage', 'management',
+            {'arm', 'cat', 'hello', 'how', 'howdy', 'man', 'manage', 'management',
              'manager', 'manly', 'meow', 'mississippi', 'purr-fection', 'super-cat',
-             'super_meow', 'woman', 'womanly', 'womanlyon'])
+             'super_meow', 'woman', 'womanly', 'womanlyon'})
 
 
 class TestTrieBuilder(unittest.TestCase):
@@ -152,22 +152,22 @@ class TestTrieBuilder(unittest.TestCase):
             isinstance(self.trie_builder.build_trie_from_file(), tuple)
         )
 
-        expected_invalid_keywords = [
+        expected_invalid_keywords = {
             '" "', '""', '"double', '#hello', '$how', '%howdy', '&super-cat', "' '", "''",
             "'single", '(super_meow)', '*purr-fection', '+meow', '.words', '/what/',
             '<sum', '=wow', '[hello', '\\maybe', '^meow', '`supercode`', 'c@t', 'commas,', 'continue-ish;',
             'howdy]', 'meow meow', 'meow!', 'sanguine?', 'set}', 'sit>', 'symbol:analogy', 'word0',
             'word1', 'word2', 'word3', 'word4', 'word5', 'word6', 'word7', 'word8', 'word9', '{unique',
             '|absolute|ly', '~approximate'
-        ]
+        }
 
-        self.trie_builder.invalid_keywords = []
+        self.trie_builder.invalid_keywords = set()
 
         trie, invalid_keywords = self.trie_builder.build_trie_from_file()
         self.assertTrue(isinstance(trie, Trie))
-        self.assertTrue(isinstance(invalid_keywords, list))
+        self.assertTrue(isinstance(invalid_keywords, set))
         self.assertTrue(len(invalid_keywords) > 0)
-        self.assertEqual(sorted(invalid_keywords), expected_invalid_keywords)
+        self.assertEqual(invalid_keywords, expected_invalid_keywords)
 
     def test_build_trie_from_list(self):
         self.trie_builder.user_keywords = 'a'
@@ -191,12 +191,12 @@ class TestTrieBuilder(unittest.TestCase):
             self.trie_builder.user_keywords
         )
 
-        self.trie_builder.user_keywords = ['hi', 'hello', 'howdy']
+        self.trie_builder.user_keywords = {'hi', 'hello', 'howdy'}
         self.assertTrue(
             isinstance(self.trie_builder.build_trie_from_list(), tuple)
         )
 
-        self.trie_builder.user_keywords = [
+        self.trie_builder.user_keywords = {
             'cat', 'hello', 'how', 'howdy', 'meow', 'super-cat', 'purr-fection',
             'super_meow', 'word0', 'word1', 'word2', 'word3', 'word4', 'word5',
             'word6', 'word7', 'word8', 'word9', 'meow!', 'c@t', '#hello', '$how',
@@ -205,22 +205,22 @@ class TestTrieBuilder(unittest.TestCase):
             '/what/', '<sum', 'sit>', 'sanguine?', '~approximate', '`supercode`',
             '.words', 'commas,', '"double', "'single", "symbol:analogy", 'continue-ish;',
             '{unique', 'set}', 'meow meow', '" "', '""', "' '", "''"
-        ]
+        }
 
-        expected_invalid_keywords = [
+        expected_invalid_keywords = {
             '" "', '""', '"double', '#hello', '$how', '%howdy', '&super-cat', "' '", "''",
             "'single", '(super_meow)', '*purr-fection', '+meow', '.words', '/what/',
             '<sum', '=wow', '[hello', '\\maybe', '^meow', '`supercode`', 'c@t', 'commas,', 'continue-ish;',
             'howdy]', 'meow meow', 'meow!', 'sanguine?', 'set}', 'sit>', 'symbol:analogy', 'word0',
             'word1', 'word2', 'word3', 'word4', 'word5', 'word6', 'word7', 'word8', 'word9', '{unique',
             '|absolute|ly', '~approximate'
-        ]
+        }
 
-        self.trie_builder.invalid_keywords = []
+        self.trie_builder.invalid_keywords = set()
         self.trie_builder.trie = Trie()
         trie, invalid_keywords = self.trie_builder.build_trie_from_list()
 
         self.assertTrue(isinstance(trie, Trie))
-        self.assertTrue(isinstance(invalid_keywords, list))
+        self.assertTrue(isinstance(invalid_keywords, set))
         self.assertTrue(len(invalid_keywords) > 0)
-        self.assertEqual(sorted(invalid_keywords), expected_invalid_keywords)
+        self.assertEqual(invalid_keywords, expected_invalid_keywords)
